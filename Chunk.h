@@ -1,7 +1,5 @@
 #pragma once
 #include "Renderer.h"
-#include "Block.h"
-#include "BlockData.h"
 #include <GL/glew.h>
 #include <glm/gtx/hash.hpp>
 #include <FastNoiseLite.h>
@@ -21,24 +19,30 @@ const glm::vec3 dirleft = glm::vec3(-1.0f, 0.0f, 0.0f);
 const glm::vec3 dirfront = glm::vec3(0.0f, 0.0f, -1.0f);
 const glm::vec3 dirback = glm::vec3(0.0f, 0.0f, 1.0f);
 
+enum ChunkState {
+	chunkstate_empty,
+	chunkstate_generated,
+	chunkstate_ready
+};
+
 class Chunk
 {
 public:
-	Block chunk[16][32][16] = {Block()};
+	int chunk[16][32][16];
 	glm::vec2 chunkPos;
+	ChunkState state = ChunkState::chunkstate_empty;
 
 	Mesh mesh;
-	Block emptyBlock;
+	int emptyBlock = 0;
 
 	Chunk(glm::vec2 pos);
-	Chunk(){}
+	Chunk() {}
 	void Generate(BiomeManager biomes);
 	glm::vec3 GetChunkGlobalOrigin();
 	void SetChunkMesh(std::vector<Vertex> vertices);
 	void RenderChunk(Renderer& renderer);
 	glm::vec3 GetGlobalPosition(glm::vec3 position);
 	bool IsPositionInside(glm::vec3 localPos);
-	Block* GetPositionValue(glm::vec3 position);
+	int GetPositionValue(glm::vec3 position);
 	glm::vec3 ClampChunkPosition(glm::vec3 position);
 };
-

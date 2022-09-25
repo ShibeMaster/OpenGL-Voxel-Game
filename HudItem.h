@@ -1,9 +1,10 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include "Mesh.h"
-#include "Renderer.h"
 #include <vector>
+#include "Renderer.h"
+#include "Mesh.h"
+
 class HudItem
 {
 public:
@@ -12,7 +13,7 @@ public:
 	glm::vec3 rotation;
 	Mesh mesh;
 
-	HudItem(){}
+	HudItem() {}
 	HudItem(std::vector<Vertex> vertices, glm::vec3 position, glm::vec3 scale) {
 		mesh = Mesh(vertices);
 		this->position = position;
@@ -27,4 +28,3 @@ public:
 		mesh.DrawMesh();
 	}
 };
-

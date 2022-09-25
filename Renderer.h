@@ -1,6 +1,7 @@
 #pragma once
+#include "glm/glm.hpp"
+#include <GL/glew.h>
 #include "Shader.h"
-#include "GameObject.h"
 
 enum CubeFace {
 	frontSide = 0,
@@ -12,16 +13,16 @@ enum CubeFace {
 };
 static const float vertices[] = {
 	-0.5f, -0.5f, -0.5f,
-	 0.5f, -0.5f, -0.5f,
-	 0.5f,  0.5f, -0.5f,
-	 0.5f,  0.5f, -0.5f,
+		0.5f, -0.5f, -0.5f,
+		0.5f,  0.5f, -0.5f,
+		0.5f,  0.5f, -0.5f,
 	-0.5f,  0.5f, -0.5f,
 	-0.5f, -0.5f, -0.5f,
 
 	-0.5f, -0.5f,  0.5f,
-	 0.5f, -0.5f,  0.5f,
-	 0.5f,  0.5f,  0.5f,
-	 0.5f,  0.5f,  0.5f,
+		0.5f, -0.5f,  0.5f,
+		0.5f,  0.5f,  0.5f,
+		0.5f,  0.5f,  0.5f,
 	-0.5f,  0.5f,  0.5f,
 	-0.5f, -0.5f,  0.5f,
 
@@ -32,24 +33,24 @@ static const float vertices[] = {
 	-0.5f, -0.5f,  0.5f,
 	-0.5f,  0.5f,  0.5f,
 
-	 0.5f,  0.5f,  0.5f,
-	 0.5f,  0.5f, -0.5f,
-	 0.5f, -0.5f, -0.5f,
-	 0.5f, -0.5f, -0.5f,
-	 0.5f, -0.5f,  0.5f,
-	 0.5f,  0.5f,  0.5f,
+		0.5f,  0.5f,  0.5f,
+		0.5f,  0.5f, -0.5f,
+		0.5f, -0.5f, -0.5f,
+		0.5f, -0.5f, -0.5f,
+		0.5f, -0.5f,  0.5f,
+		0.5f,  0.5f,  0.5f,
 
 	-0.5f, -0.5f, -0.5f,
-	 0.5f, -0.5f, -0.5f,
-	 0.5f, -0.5f,  0.5f,
-	 0.5f, -0.5f,  0.5f,
+		0.5f, -0.5f, -0.5f,
+		0.5f, -0.5f,  0.5f,
+		0.5f, -0.5f,  0.5f,
 	-0.5f, -0.5f,  0.5f,
 	-0.5f, -0.5f, -0.5f,
 
 	-0.5f,  0.5f, -0.5f,
-	 0.5f,  0.5f, -0.5f,
-	 0.5f,  0.5f,  0.5f,
-	 0.5f,  0.5f,  0.5f,
+		0.5f,  0.5f, -0.5f,
+		0.5f,  0.5f,  0.5f,
+		0.5f,  0.5f,  0.5f,
 	-0.5f,  0.5f,  0.5f,
 	-0.5f,  0.5f, -0.5f,
 };
@@ -60,7 +61,5 @@ public:
 	GLuint vao;
 
 	void Initialize(const char* vertexSource, const char* fragmentSource);
-	void Render(GameObject& gameObject);
 	void RenderCubeFace(CubeFace face, glm::vec3 position, glm::vec4 color);
 };
-

@@ -1,7 +1,4 @@
 #pragma once
-#ifndef SHADER_H
-#define SHADER_H
-
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <string>
@@ -14,7 +11,7 @@ class Shader {
 public:
 	GLuint id;
 
-	Shader(){}
+	Shader() {}
 	Shader(const char* vertexSource, const char* fragmentSource) {
 		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
 		glShaderSource(vertexShader, 1, &vertexSource, NULL);
@@ -43,10 +40,10 @@ public:
 	void Use() {
 		glUseProgram(id);
 	}
-	void SetMat4(const std::string &name, const glm::mat4 &value) const {
+	void SetMat4(const std::string& name, const glm::mat4& value) const {
 		glProgramUniformMatrix4fv(id, glGetUniformLocation(id, name.c_str()), 1, GL_FALSE, &value[0][0]);
 	}
-	void SetVec4(const std::string& name, const glm::vec4 &value) const {
+	void SetVec4(const std::string& name, const glm::vec4& value) const {
 		glUniform4fv(glGetUniformLocation(id, name.c_str()), 1, &value[0]);
 	}
 	void SetFloat(const std::string& name, const float value) const {
@@ -56,4 +53,3 @@ public:
 		glUniform1i(glGetUniformLocation(id, name.c_str()), value);
 	}
 };
-#endif

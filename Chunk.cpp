@@ -13,18 +13,18 @@ void Chunk::Generate(BiomeManager biomes) {
 	for (int x = 0; x < 16; x++) {
 		for (int z = 0; z < 16; z++) {
 			glm::vec3 chunkGlobalOrigin = GetChunkGlobalOrigin();
-			Biome biome = biomes.GetBiomeInformation(glm::vec2(chunkGlobalOrigin.x + x, chunkGlobalOrigin.z + z));
+			Biome* biome = biomes.GetBiomeInformation(glm::vec2(chunkGlobalOrigin.x + x, chunkGlobalOrigin.z + z));
 			int height = biomes.GetElevation(glm::vec2(chunkGlobalOrigin.x + x, chunkGlobalOrigin.z + z));
 			for (int y = 0; y < height; y++) {
 				bool found = false;
-				for (Layer layer : biome.layers)
+				for (Layer layer : biome->layers)
 				{
 					if (height <= layer.maxGenerationHeight && height >= layer.minGenerationHeight && height - y <= layer.depth) {
-						chunk[x][y][z] = Block(BlockDataManager::GetBlockData(layer.block));
+						chunk[x][y][z] = BlockDataManager::GetBlockData(layer.block)->type;
 						found = true;
 					}
 				}
-				if (!found) chunk[x][y][z] = Block(BlockDataManager::GetBlockData(biome.defaultBlock));
+				if (!found) chunk[x][y][z] = BlockDataManager::GetBlockData(biome->defaultBlock)->type;
 			}
 
 		}
@@ -50,7 +50,7 @@ bool Chunk::IsPositionInside(glm::vec3 position) {
 glm::vec3 Chunk::GetGlobalPosition(glm::vec3 position) {
 	return glm::vec3(position.x + chunkPos.x * 16, position.y, position.z + chunkPos.y * 16);
 }
-Block* Chunk::GetPositionValue(glm::vec3 position) {
-	if (!IsPositionInside(position)) return &emptyBlock;
-	return &chunk[(int)position.x][(int)position.y][(int)position.z];
+int Chunk::GetPositionValue(glm::vec3 position) {
+	if (!IsPositionInside(position)) return emptyBlock;
+	return chunk[(int)position.x][(int)position.y][(int)position.z];
 }

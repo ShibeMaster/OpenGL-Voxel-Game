@@ -7,7 +7,8 @@
 #include <direct.h>
 #include <filesystem>
 #include "BlockData.h"
-
+#include "Inventory.h"
+#include "ItemData.h"
 
 enum DataType {
 	block,
@@ -17,12 +18,13 @@ enum DataType {
 static const std::string FILE_EXTENSION = ".cum";
 class CustomData {
 public:
-	friend std::istream& operator>>(std::istream& stream, CustomData& data);
-	friend std::ostream& operator<<(std::ostream& stream, CustomData& data);
-	friend std::ofstream& operator<<(std::ofstream& stream, CustomData& data);
-	friend std::ifstream& operator>>(std::ifstream& stream, CustomData& data);
+	friend std::istream& operator>>(std::istream& stream, CustomData& data) { return stream; }
+	friend std::ostream& operator<<(std::ostream& stream, CustomData& data) { return stream; }
+	friend std::ofstream& operator<<(std::ofstream& stream, CustomData& data) { return stream; }
+	friend std::ifstream& operator>>(std::ifstream& stream, CustomData& data) { return stream; }
 };
 
+/*
 struct BlockCustomData : public CustomData {
 public:
 	BlockType type;
@@ -117,6 +119,7 @@ public:
 	}
 
 };
+*/
 
 struct GameData {
 public:
@@ -135,7 +138,6 @@ public:
 
 		switch (data.type)
 		{
-		case DataType::block: data.data = BlockCustomData();
 		default: data.data = CustomData(); break;
 		}
 
@@ -169,30 +171,16 @@ public:
 
 
 
+
 class CustomDataManager
 {
 public:
 
 	static void InitializeFilesystem() {
 		int datastatus = _mkdir(GetAppDataPath().c_str());
-		std::cout << datastatus << std::endl;
 		
-		
-		std::string inputPath = GetInputPath();
-		std::string outputPath = GetOutputPath();
-
-		int inputStatus = _mkdir(inputPath.c_str());
-		int outputStatus = _mkdir(outputPath.c_str());
-
-		int blockInputStatus = _mkdir((GetInputPath() + "block\\").c_str());
-		int biomeInputStatus = _mkdir((GetInputPath() + "biome\\").c_str());
-		int itemInputStatus = _mkdir((GetInputPath() + "item\\").c_str());
-
-		std::cout << inputStatus << " | " << outputStatus << std::endl;
-		std::cout << blockInputStatus << " | " << biomeInputStatus << " | " << itemInputStatus << std::endl;
-
-		std::vector<GameData> data = GetTypeData(DataType::block);
-		std::cout << data[0];
+		std::string saveDataPath = GetSavePath();
+		int outputStatus = _mkdir(saveDataPath.c_str());
 	}
 
 	static const GameData GetFileData(const char* path) {
@@ -201,38 +189,15 @@ public:
 		stream.open(path);
 		stream >> data;
 		stream.close();
-		std::cout << data;
 		return data;
 	}
-
-	static std::vector<GameData> GetTypeData(DataType type) {
-		std::vector<const char*> paths;
-		for (auto file : std::filesystem::directory_iterator(GetInputPath() + GetDataPath(type))) {
-			paths.push_back(file.path().string().c_str());
-		}
-
-		std::vector<GameData> data;
-		for (const char* path : paths) {
-			data.push_back(GetFileData(path));
-		}
-		return data;
-	}
-	static std::string GetDataPath(DataType type) {
-		switch (type) {
-		case DataType::block: return "block\\";
-		}
-	}
-	static std::string GetOutputPath() {
-		return GetAppDataPath() + "\\output\\";
-	}
-	static std::string GetInputPath() {
-		return GetAppDataPath() + "\\input\\";
+	static std::string GetSavePath() {
+		return GetAppDataPath() + "\\save\\";
 	}
 	static std::string GetAppDataPath() {
 		char* appdataPath;
 		size_t len;
 		_dupenv_s(&appdataPath, &len, "appdata");
-		std::cout << appdataPath << std::endl;
 		std::string path = std::string(appdataPath);
 		return path + "\\gaming";
 	}
@@ -241,7 +206,7 @@ public:
 		std::cout << std::endl << std::endl;
 		std::cout << data;
 
-		const std::string path = GetOutputPath() + data.name + FILE_EXTENSION;
+		const std::string path = GetSavePath() + data.name + FILE_EXTENSION;
 		std::ofstream file = std::ofstream(path);
 		file << data;
 		file.close();

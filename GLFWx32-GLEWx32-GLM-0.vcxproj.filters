@@ -13,12 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\BlockData">
-      <UniqueIdentifier>{0cfb7248-4c00-429e-bef3-25294fef8ca0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\BlockData">
-      <UniqueIdentifier>{e3327af7-bae2-42ce-8210-4deef11c5d7c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Hud">
       <UniqueIdentifier>{55eaae4e-1c8b-43a0-b071-88d1aec57056}</UniqueIdentifier>
     </Filter>
@@ -31,46 +25,52 @@
     <Filter Include="Header Files\Custom Data">
       <UniqueIdentifier>{39105159-db6f-4804-9bd1-b435b591ac52}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Terrain">
+      <UniqueIdentifier>{df7d21ab-e470-44d6-b900-925b2146d154}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Engine">
+      <UniqueIdentifier>{0bb48d2a-4459-4377-99e0-68c2e1e55903}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Player">
+      <UniqueIdentifier>{f01d3559-b77c-47d9-9f33-ea46e37232c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine">
+      <UniqueIdentifier>{1e288c31-e5e8-4388-b560-8e1578519e65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Terrain">
+      <UniqueIdentifier>{d07dc571-b8e0-4067-b80e-28c685c0ec7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Player">
+      <UniqueIdentifier>{e013c6b4-bac7-4566-94db-3e1998f449e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Hud\Inventory">
+      <UniqueIdentifier>{86e3b2ce-5c81-4421-a69e-aea1776716f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Data">
+      <UniqueIdentifier>{19f0f57e-a7bb-4372-8337-7cedb2237660}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Data\Blocks">
+      <UniqueIdentifier>{0cfb7248-4c00-429e-bef3-25294fef8ca0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Data\Items">
+      <UniqueIdentifier>{a53d150d-a8e0-4d85-88c1-c2bd75a90bbf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Data">
+      <UniqueIdentifier>{d290b5c6-0b49-472e-9267-eea1b344df3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Data\Item">
+      <UniqueIdentifier>{bb6e0ca9-266d-4757-a5f2-66bb62cf93b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Data\Blocks">
+      <UniqueIdentifier>{e3327af7-bae2-42ce-8210-4deef11c5d7c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Shader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Terrain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Chunk.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Block.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="BlockData.cpp">
-      <Filter>Source Files\BlockData</Filter>
-    </ClCompile>
-    <ClCompile Include="BlockDataManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Mesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BiomeManager.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Data\Blocks</Filter>
     </ClCompile>
     <ClCompile Include="HudItem.cpp">
       <Filter>Source Files\Hud</Filter>
@@ -81,55 +81,64 @@
     <ClCompile Include="HotbarSlot.cpp">
       <Filter>Source Files\Hud</Filter>
     </ClCompile>
-    <ClCompile Include="Inventory.cpp">
-      <Filter>Source Files\Hud</Filter>
-    </ClCompile>
-    <ClCompile Include="ItemDataManager.cpp">
-      <Filter>Source Files\Hud</Filter>
-    </ClCompile>
     <ClCompile Include="CustomDataManager.cpp">
       <Filter>Source Files\Custom Data</Filter>
     </ClCompile>
+    <ClCompile Include="BlockDataManager.cpp">
+      <Filter>Source Files\Data\Blocks</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="BiomeManager.cpp">
+      <Filter>Source Files\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="Chunk.cpp">
+      <Filter>Source Files\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrain.cpp">
+      <Filter>Source Files\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="BlockDefinitions.cpp">
+      <Filter>Source Files\Custom Data</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemData.cpp">
+      <Filter>Source Files\Data\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemDefinitions.cpp">
+      <Filter>Source Files\Custom Data</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemDataManager.cpp">
+      <Filter>Source Files\Data\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Inventory.cpp">
+      <Filter>Source Files\Data\Items</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Shader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Terrain.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Chunk.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Block.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="BlockData.h">
-      <Filter>Header Files\BlockData</Filter>
+      <Filter>Header Files\Data\Blocks</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BlockDataManager.h">
-      <Filter>Header Files\BlockData</Filter>
-    </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BiomeManager.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Data\Blocks</Filter>
     </ClInclude>
     <ClInclude Include="HudItem.h">
       <Filter>Header Files\Hud</Filter>
@@ -137,17 +146,53 @@
     <ClInclude Include="Hud.h">
       <Filter>Header Files\Hud</Filter>
     </ClInclude>
-    <ClInclude Include="HotbarSlot.h">
-      <Filter>Header Files\Hud</Filter>
-    </ClInclude>
-    <ClInclude Include="Inventory.h">
-      <Filter>Header Files\Hud</Filter>
-    </ClInclude>
-    <ClInclude Include="ItemDataManager.h">
-      <Filter>Header Files\Hud</Filter>
-    </ClInclude>
     <ClInclude Include="CustomDataManager.h">
       <Filter>Header Files\Custom Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Chunk.h">
+      <Filter>Header Files\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Header Files\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="BiomeManager.h">
+      <Filter>Header Files\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="HotbarSlot.h">
+      <Filter>Header Files\Hud\Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="BlockDefinitions.h">
+      <Filter>Header Files\Custom Data</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemDefinitions.h">
+      <Filter>Header Files\Custom Data</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemData.h">
+      <Filter>Header Files\Data\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Inventory.h">
+      <Filter>Header Files\Data\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemDataManager.h">
+      <Filter>Header Files\Data\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrain.h">
+      <Filter>Header Files\Terrain</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

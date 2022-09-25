@@ -1,5 +1,4 @@
 #include "Player.h"
-#include "Camera.h"
 
 Player::Player() {
 	camera = Camera(glm::vec3(0.0f, 15.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f);
@@ -18,7 +17,6 @@ void Player::InitializePlayer() {
 }
 void Player::Update(GLFWwindow* window, float deltaTime, Renderer& renderer) {
 	velocity = glm::vec3(0.0f, 0.0f, 0.0f);
-
 	if (hasBlockSelected) RenderSelectedBlock(renderer);
 }
 

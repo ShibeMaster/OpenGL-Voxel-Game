@@ -1,13 +1,13 @@
 #pragma once
-#include "Camera.h"
-#include "Terrain.h"
-#include "Renderer.h"
 #include <glm/glm.hpp>
-#include "Shader.h"
+#include <GL/glew.h>
 #include <iostream>
-#include "Inventory.h"
 #include <vector>
-#include <glm/glm.hpp>
+#include "Camera.h"
+#include "Renderer.h"
+#include "Mesh.h"
+#include "Chunk.h"
+#include "Inventory.h"
 
 class Player
 {
@@ -35,4 +35,3 @@ public:
 	void Move(float deltaTime);
 	glm::vec3 GetPosition();
 };
-

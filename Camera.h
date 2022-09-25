@@ -39,11 +39,11 @@ public:
 	float speed;
 	float sensitivity;
 
-	float lastMouseX = 800.0f/2.0f;
-	float lastMouseY = 800.0f/2.0f;
+	float lastMouseX = 800.0f / 2.0f;
+	float lastMouseY = 800.0f / 2.0f;
 	bool firstMouseMove = true;
 
-	Camera(){}
+	Camera() {}
 	Camera(glm::vec3 pos, glm::vec3 wUp = glm::vec3(0.0f, 1.0f, 0.0f), float y = YAW, float p = PITCH) : speed(SPEED), sensitivity(SENSITIVITY) {
 		position = pos;
 		worldUp = wUp;
@@ -90,4 +90,3 @@ public:
 		return glm::lookAt(position, position + forward, up);
 	}
 };
-

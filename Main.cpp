@@ -14,7 +14,7 @@
 #include "Terrain.h"
 #include <vector>
 #include <thread>
-#include "CustomDataManager.h"
+#include "ItemDataManager.h"
 
 glm::vec3 positions[] = {
 	glm::vec3(0.0f,  0.0f,  0.0f),
@@ -83,9 +83,8 @@ GLFWwindow* window;
 Renderer renderer;
 Hud hud;
 Terrain terrain;
-std::vector<GameObject> gameObjects;
 Player player;
-std::thread updateChunks;
+std::thread chunkGeneration;
 
 float timeSinceLastPlaced = 0.0f;
 float timeSinceLastSwappedMode = 0.0f;
@@ -112,17 +111,21 @@ void ProcessInput() {
 		player.placing = !player.placing;
 		timeSinceLastPlaced = glfwGetTime();
 	}
-
-	if (glfwGetKey(window, GLFW_KEY_SPACE) && glfwGetTime() - timeSinceLastSwappedMode >= 0.25f) {
-		if (player.placing) terrain.CreateBlock(player.GetPosition(), player.selectedPosition, BlockDataManager::GetWood());
-		else terrain.DestroyBlock(player.GetPosition(), player.selectedPosition);
-		timeSinceLastSwappedMode = glfwGetTime();
+	if (glfwGetKey(window, GLFW_KEY_F3) && glfwGetTime() - timeSinceLastPlaced >= 0.25f) {
+		glm::vec2 chunkPos = terrain.GetChunkPosition(player.GetPosition());
+		std::cout << chunkPos.x << " | " << chunkPos.y << std::endl;
+		timeSinceLastPlaced = glfwGetTime();
 	}
 
-	if (glfwGetKey(window, GLFW_KEY_F3) == GLFW_PRESS) {
-		GameData data;
-		CustomDataManager::CreateGameData(data);
-
+	if (glfwGetKey(window, GLFW_KEY_F4)) player.inventory.TryAddItem(ItemType::item_testItem1);
+	if (glfwGetKey(window, GLFW_KEY_SPACE) && glfwGetTime() - timeSinceLastSwappedMode >= 0.25f) {
+		if (player.placing && player.inventory.inventory[player.inventory.selectedIndex].data.usage == ItemUsageType::usage_placeable) terrain.CreateBlock(player.selectedPosition, player.inventory.inventory[player.inventory.selectedIndex].data.type);
+		else if (player.inventory.inventory[player.inventory.selectedIndex].data.usage == ItemUsageType::usage_consumable) {}
+		else {
+			player.inventory.TryAddItem(BlockDataManager::GetBlockData((BlockType)terrain.GetPositionValue(player.selectedPosition))->item);
+			terrain.DestroyBlock(player.selectedPosition);
+		}
+		timeSinceLastSwappedMode = glfwGetTime();
 	}
 }
 void Update() {
@@ -142,6 +145,7 @@ void Update() {
 
 		ProcessInput();
 
+		terrain.MeshGeneration();
 		terrain.UpdateRenderedChunks(player.GetPosition());
 		terrain.RenderChunks(renderer);
 
@@ -162,6 +166,7 @@ void Update() {
 		glfwPollEvents();
 		glfwSwapBuffers(window);
 	}
+	chunkGeneration.detach();
 }
 void HandleMouseInput(GLFWwindow* window, double xpos, double ypos) {
 	player.camera.ProcessCameraMouse(window, xpos, ypos);
@@ -171,6 +176,9 @@ void HandleKeyPress(GLFWwindow* window, int key, int scancode, int action, int m
 		player.inventory.selectedIndex = key == GLFW_KEY_0 ? 9 : key - 49;
 		hud.InventoryUpdated();
 	}
+}
+void ChunkGenerationThread() {
+	terrain.GenerationThread();
 }
 int main() {
 	glfwInit();
@@ -184,14 +192,20 @@ int main() {
 	glm::mat4 projection = glm::perspective(45.0f, 800.0f / 800.0f, 0.1f, 100.0f);
 	renderer.shader.SetMat4("projection", projection);
 	
-	CustomDataManager::InitializeFilesystem();
 	hud = Hud(hudVertexSource, fragmentSource, &player.inventory);
 
+	BlockDataManager::InitializeBlockDefs();
+	ItemDataManager::InitializeItemDefs();
+	terrain.biomeManager.InitializeBiomeDefs();
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetCursorPosCallback(window, HandleMouseInput);
 	glfwSetKeyCallback(window, HandleKeyPress);
 
 	player.InitializePlayer();
+
+	chunkGeneration = std::thread(ChunkGenerationThread);
+	terrain.UpdateRenderedChunks(player.GetPosition());
+
 
 	glEnable(GL_DEPTH_TEST);
 	Update();

@@ -28,7 +28,7 @@ public:
 	}
 
 	void InitializeMesh() {
-		glGenVertexArrays(1, &vao);	
+		glGenVertexArrays(1, &vao);
 		glBindVertexArray(vao);
 
 		glGenBuffers(1, &vbo);
@@ -44,4 +44,3 @@ public:
 		glBindVertexArray(0);
 	}
 };
-

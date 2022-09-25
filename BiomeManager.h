@@ -2,9 +2,8 @@
 #include <vector>
 #include <FastNoiseLite.h>
 #include <glm/glm.hpp>
-#include "Block.h"
+#include <map>
 #include "BlockDataManager.h"
-
 
 const int MAX_GENERATION_HEIGHT = 32;
 const int MID_GENERATION_HEIGHT = 24;
@@ -26,7 +25,6 @@ struct Layer {
 struct Biome {
 public:
 	BiomeType type;
-	FastNoiseLite heightMultiplier;
 	std::vector<Layer> layers;
 	BlockType defaultBlock;
 
@@ -36,16 +34,28 @@ public:
 	float maxPrec;
 	float minPrec;
 };
+
+
+
 class BiomeManager
 {
 public:
+	std::vector<Biome> biomedefs = {
+		Biome{ BiomeType::plains,  { Layer{BlockType::dirt, 32, 12, 2}, Layer{BlockType::sand, 12, 7, 2} }, BlockType::stone, 0.5f, -0.5f, 1.0f, -0.25f },
+		Biome{ BiomeType::desert, { Layer{ BlockType::sand, 32, 6, 5 } }, BlockType::stone, 1.0f, 0.5f, 0.0f, -1.0f },
+		Biome{ BiomeType::snowField, { Layer{BlockType::snow, 32, 12, 2}, Layer{BlockType::dirt, 12, 7, 2} }, BlockType::stone, -0.25f, -1.0f, 1.0f, 0.25f },
+		Biome{ BiomeType::river, { Layer{BlockType::water, 20, 10, 5} }, BlockType::sand, 0.0f, 0.0f, 1.0f, 0.25f}
+	};
+
+	std::map<int, Biome> biomes;
+
 	FastNoiseLite temperature;
 	FastNoiseLite precipitation;
 	FastNoiseLite height;
 
-	float tempSeed;
-	float precSeed;
-	float heightSeed;
+	int tempSeed;
+	int precSeed;
+	int heightSeed;
 
 	BiomeManager() {
 		tempSeed = rand();
@@ -61,7 +71,7 @@ public:
 		precipitation.SetNoiseType(FastNoiseLite::NoiseType_Cellular);
 		precipitation.SetFrequency(0.005);
 		precipitation.SetCellularDistanceFunction(FastNoiseLite::CellularDistanceFunction_EuclideanSq);
-	
+
 		height = FastNoiseLite(heightSeed);
 		height.SetNoiseType(FastNoiseLite::NoiseType_Perlin);
 		height.SetFractalType(FastNoiseLite::FractalType_FBm);
@@ -70,61 +80,48 @@ public:
 
 
 	// Biome Data
-	Biome plains = Biome{ BiomeType::plains, GetBiomeHeightMultiplierNoiseDebug(rand()), { Layer{BlockType::dirt, 32, 12, 2}, Layer{BlockType::sand, 12, 7, 2} }, BlockType::stone, 0.5f, -0.5f, 1.0f, -0.25f };
-	Biome desert = Biome{ BiomeType::desert, GetBiomeHeightMultiplierNoiseDebug(rand()), { Layer{ BlockType::sand, 32, 6, 5 } }, BlockType::stone, 1.0f, 0.5f, 0.0f, -1.0f };
-	Biome snowField = Biome{ BiomeType::snowField, GetBiomeHeightMultiplierNoiseDebug(rand()), { Layer{BlockType::snow, 32, 12, 2}, Layer{BlockType::dirt, 12, 7, 2} }, BlockType::stone, -0.25f, -1.0f, 1.0f, 0.25f };
-	Biome river = Biome{ BiomeType::river, GetBiomeHeightMultiplierNoiseDebug(rand()), { Layer{BlockType::water, 20, 10, 5} }, BlockType::sand, 0.0f, 0.0f, 1.0f, 0.25f};
 
-	Biome defaultBiome = plains;
 
-	std::vector<Biome> availableBiomes = {
+	BiomeType defaultBiome = plains;
+
+	std::vector<BiomeType> availableBiomes = {
 		desert,
 		snowField
 	};
 
 	// Methods
-
-	FastNoiseLite GetBiomeHeightMultiplierNoiseDebug(int seed) {
-		FastNoiseLite noise;
-		noise.SetSeed(seed);
-		noise.SetNoiseType(FastNoiseLite::NoiseType_Perlin);
-		noise.SetFrequency(0.03);
-		noise.SetFractalType(FastNoiseLite::FractalType_FBm);
-		return noise;
-	}
-
-
 	static float Lerp(float a, float b, float t) {
 		return a + (t * (b - a));
 	}
 
-	Biome GetBiomeInformation(glm::vec2 position) {
+	Biome* GetBiomeInformation(glm::vec2 position) {
 		Biome biome;
 		float temp = Lerp(-1.0f, 1.0f, abs(temperature.GetNoise(position.x, position.y)));
 		float prec = Lerp(-1.0f, 1.0f, abs(precipitation.GetNoise(position.x, position.y)));
-		std::vector<Biome> possibleBiomes;
-		for (Biome biome : availableBiomes) {
-			if (temp <= biome.maxTemp && temp >= biome.minTemp && prec <= biome.maxPrec && prec >= biome.minPrec) {
+		std::vector<Biome*> possibleBiomes;
+		for (BiomeType type : availableBiomes) {
+			Biome* biome = GetBiomeData(type);
+			if (temp <= biome->maxTemp && temp >= biome->minTemp && prec <= biome->maxPrec && prec >= biome->minPrec) {
 				possibleBiomes.push_back(biome);
 			}
 		}
-		return possibleBiomes.size() == 0 ? (GetElevation(position) < MID_GENERATION_HEIGHT - 2) ? river : defaultBiome : possibleBiomes[rand() % possibleBiomes.size()];
+		return possibleBiomes.size() == 0 ? (GetElevation(position) < MID_GENERATION_HEIGHT - 2) ? GetBiomeData(BiomeType::river) : GetBiomeData(defaultBiome) : possibleBiomes[rand() % possibleBiomes.size()];
 	}
 
-	Biome GetBiomeData(BiomeType type) {
-		switch (type) {
-		case BiomeType::plains: return plains;
-		case BiomeType::desert: return desert;
-		case BiomeType::snowField: return snowField;
-		case BiomeType::river: return river;
+	void InitializeBiomeDefs() {
+
+		for (Biome biome : biomedefs) {
+			biomes[(int)biome.type] = biome;
 		}
-		return plains;
+	}
+
+	Biome* GetBiomeData(BiomeType type) {
+		return &biomes[(int)type];
 	}
 
 	int GetElevation(glm::vec2 position) {
-		float elevation = height.GetNoise(position.x, position.y);
-		elevation = (int)Lerp(MID_GENERATION_HEIGHT, MAX_GENERATION_HEIGHT, elevation);
+		float noise = height.GetNoise(position.x, position.y);
+		int elevation = (int)Lerp(MID_GENERATION_HEIGHT, MAX_GENERATION_HEIGHT, noise);
 		return elevation;
 	}
 };
-

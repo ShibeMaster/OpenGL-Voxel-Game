@@ -7,6 +7,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include "InputManager.h"
 
 enum MovementDirection {
 	forward,
@@ -39,10 +40,6 @@ public:
 	float speed;
 	float sensitivity;
 
-	float lastMouseX = 800.0f / 2.0f;
-	float lastMouseY = 800.0f / 2.0f;
-	bool firstMouseMove = true;
-
 	Camera() {}
 	Camera(glm::vec3 pos, glm::vec3 wUp = glm::vec3(0.0f, 1.0f, 0.0f), float y = YAW, float p = PITCH) : speed(SPEED), sensitivity(SENSITIVITY) {
 		position = pos;
@@ -61,23 +58,9 @@ public:
 		right = glm::normalize(glm::cross(forward, worldUp));
 		up = glm::normalize(glm::cross(right, forward));
 	}
-	void ProcessCameraMouse(GLFWwindow* window, double xpos, double ypos) {
-		if (firstMouseMove) {
-			lastMouseX = xpos;
-			lastMouseY = ypos;
-			firstMouseMove = false;
-		}
-		float xoffset = xpos - lastMouseX;
-		float yoffset = lastMouseY - ypos;
-
-		lastMouseX = xpos;
-		lastMouseY = ypos;
-
-		xoffset *= sensitivity;
-		yoffset *= sensitivity;
-
-		yaw += xoffset;
-		pitch += yoffset;
+	void ProcessCameraMouse() {
+		yaw += InputManager::mouse.xOffset * sensitivity;
+		pitch += InputManager::mouse.yOffset * sensitivity;
 
 		if (pitch > 89.0f)
 			pitch = 89.0f;

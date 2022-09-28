@@ -5,6 +5,7 @@
 #include "HudItem.h"
 #include "Mesh.h"
 #include <vector>
+#include "MathsExtensions.h"
 
 class HotbarSlot
 {
@@ -27,5 +28,8 @@ public:
 	void Render(Renderer renderer) {
 		slot.Render(renderer);
 		itemHUD.Render(renderer);
+	}
+	bool IsInBounds(glm::vec2 position) {
+		return position.x > MathsExtensions::Lerp(400.0f, 800.0f, (slot.position.x - (0.5f * slot.scale.x))) && position.x < MathsExtensions::Lerp(400.0f, 800.0f, (slot.position.x + (0.5f * slot.scale.x))) && position.y > MathsExtensions::Lerp(400.0f, 800.0f, (slot.position.y - (0.5f * slot.scale.y))) && position.y > MathsExtensions::Lerp(400.0f, 800.0f, (slot.position.y + (0.5f * slot.scale.y)));
 	}
 };

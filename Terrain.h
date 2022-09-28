@@ -78,7 +78,7 @@ public:
 	glm::vec3 GetLocalPosition(glm::vec3 position) {
 		int posx = (int)position.x % 16;
 		int posz = (int)position.z % 16;
-		return glm::floor(glm::vec3(posx < 0 ? 16 + posx : posx, position.y, posz < 0 ? 16 + posz : posz));
+		return glm::vec3(posx < 0 ? 16 + posx : posx, position.y, posz < 0 ? 16 + posz : posz);
 	}
 	int GetPositionValue(glm::vec3 globalPos) {
 		if (!ChunkExists(GetChunkPosition(globalPos))) return emptyBlock;

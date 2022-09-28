@@ -30,16 +30,21 @@
     <ClCompile Include="HotbarSlot.cpp" />
     <ClCompile Include="Hud.cpp" />
     <ClCompile Include="HudItem.cpp" />
+    <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="ItemData.cpp" />
     <ClCompile Include="ItemDataManager.cpp" />
     <ClCompile Include="ItemDefinitions.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MathsExtensions.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="Mouse.cpp" />
+    <ClCompile Include="PhysicsExtensions.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Terrain.cpp" />
+    <ClCompile Include="Time.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BiomeManager.h" />
@@ -53,16 +58,21 @@
     <ClInclude Include="HotbarSlot.h" />
     <ClInclude Include="Hud.h" />
     <ClInclude Include="HudItem.h" />
+    <ClInclude Include="InputManager.h" />
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="ItemData.h" />
     <ClInclude Include="ItemDataManager.h" />
     <ClInclude Include="ItemDefinitions.h" />
+    <ClInclude Include="MathsExtensions.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="Mouse.h" />
+    <ClInclude Include="PhysicsExtensions.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Terrain.h" />
+    <ClInclude Include="Time.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GLFWx32-GLEWx32-GLM-0.rc" />

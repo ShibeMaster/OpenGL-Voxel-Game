@@ -15,19 +15,9 @@
 #include <vector>
 #include <thread>
 #include "ItemDataManager.h"
-
-glm::vec3 positions[] = {
-	glm::vec3(0.0f,  0.0f,  0.0f),
-	glm::vec3(2.0f,  5.0f, -15.0f),
-	glm::vec3(-1.5f, -2.2f, -2.5f),
-	glm::vec3(-3.8f, -2.0f, -12.3f),
-	glm::vec3(2.4f, -0.4f, -3.5f),
-	glm::vec3(-1.7f,  3.0f, -7.5f),
-	glm::vec3(1.3f, -2.0f, -2.5f),
-	glm::vec3(1.5f,  2.0f, -2.5f),
-	glm::vec3(1.5f,  0.2f, -1.5f),
-	glm::vec3(-1.3f,  1.0f, -1.5f)
-};
+#include "InputManager.h"
+#include "Time.h"
+#include "Mouse.h"
 
 
 const char* vertexSource = R"GLSL(
@@ -85,11 +75,12 @@ Hud hud;
 Terrain terrain;
 Player player;
 std::thread chunkGeneration;
+std::thread gameTick;
 
 float timeSinceLastPlaced = 0.0f;
 float timeSinceLastSwappedMode = 0.0f;
 
-float lastFrameTime, deltaTime = 0.0f;
+const float TICK_FREQUENCY = 50.0f;
 
 const int WIDTH = 800;
 const int HEIGHT = 800;
@@ -107,6 +98,10 @@ void ProcessInput() {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE))
 		glfwSetWindowShouldClose(window, true);
 
+	if (InputManager::GetKeyDown(GLFW_KEY_TAB) && glfwGetTime() - timeSinceLastPlaced >= 0.25f) {
+		hud.ToggleInventory();
+		timeSinceLastPlaced = glfwGetTime();
+	}
 	if (glfwGetKey(window, GLFW_KEY_C) && glfwGetTime() - timeSinceLastPlaced >= 0.25f) {
 		player.placing = !player.placing;
 		timeSinceLastPlaced = glfwGetTime();
@@ -117,9 +112,21 @@ void ProcessInput() {
 		timeSinceLastPlaced = glfwGetTime();
 	}
 
-	if (glfwGetKey(window, GLFW_KEY_F4)) player.inventory.TryAddItem(ItemType::item_testItem1);
-	if (glfwGetKey(window, GLFW_KEY_SPACE) && glfwGetTime() - timeSinceLastSwappedMode >= 0.25f) {
-		if (player.placing && player.inventory.inventory[player.inventory.selectedIndex].data.usage == ItemUsageType::usage_placeable) terrain.CreateBlock(player.selectedPosition, player.inventory.inventory[player.inventory.selectedIndex].data.type);
+	if (InputManager::GetKeyDown(GLFW_KEY_F5) && glfwGetTime() - timeSinceLastPlaced >= 0.25f) {
+		glm::vec3 playerPos = player.GetFeetPosition() + PhysicsExtensions::RemoveY(player.velocity) * Time::fixedDeltaTime;
+		glm::vec3 playerLocalPos = terrain.GetLocalPosition(playerPos);
+		std::cout << playerLocalPos.x << " | " << playerLocalPos.y << " | " << playerLocalPos.z << " || " << playerPos.x << " | " << playerPos.y << " | " << playerPos.z << std::endl;
+	}
+
+	if (InputManager::GetKeyDown(GLFW_KEY_F4) && glfwGetTime() - timeSinceLastPlaced >= 0.25f) {
+		player.inventory.TryAddItem(ItemType::item_testItem1);
+		timeSinceLastPlaced = glfwGetTime();
+	}
+	if (InputManager::GetKeyDown(GLFW_KEY_SPACE) && glfwGetTime() - timeSinceLastSwappedMode >= 0.25f && !hud.menuOpen) {
+		if (player.placing && player.inventory.inventory[player.inventory.selectedIndex].data.usage == ItemUsageType::usage_placeable) {
+			terrain.CreateBlock(player.selectedPosition, player.inventory.inventory[player.inventory.selectedIndex].data.type);
+			player.inventory.TryRemoveItem(player.inventory.selectedIndex);
+		}
 		else if (player.inventory.inventory[player.inventory.selectedIndex].data.usage == ItemUsageType::usage_consumable) {}
 		else {
 			player.inventory.TryAddItem(BlockDataManager::GetBlockData((BlockType)terrain.GetPositionValue(player.selectedPosition))->item);
@@ -128,11 +135,29 @@ void ProcessInput() {
 		timeSinceLastSwappedMode = glfwGetTime();
 	}
 }
+void Tick() {
+	float lastTickTime = 0.0f;
+	
+	// ticks per second
+	while (true) {
+		if (glfwGetTime() - lastTickTime >= 1.0f / TICK_FREQUENCY) {
+			lastTickTime = glfwGetTime();
+	//		player.SetGrounded(terrain.GetPositionValue(player.GetPosition() + dirdown * player.playerHeight) != 0);
+
+			player.Update();
+//			glm::vec3 playerNextFramePos = player.GetFeetPosition() + PhysicsExtensions::RemoveY(player.velocity) * Time::fixedDeltaTime;
+
+
+		//	if (terrain.GetPositionValue(playerNextFramePos) != 0)
+			//	player.Collision();
+			player.Move();
+
+		}
+	}
+}
 void Update() {
 	while (!glfwWindowShouldClose(window)) {
-		float currentFrameTime = glfwGetTime();
-		deltaTime = currentFrameTime - lastFrameTime;
-		lastFrameTime = currentFrameTime;
+		Time::Update();
 
 		glm::mat4 model = glm::mat4(1.0f);
 		renderer.shader.SetMat4("model", model);
@@ -149,27 +174,24 @@ void Update() {
 		terrain.UpdateRenderedChunks(player.GetPosition());
 		terrain.RenderChunks(renderer);
 
+		if (player.hasBlockSelected) player.RenderSelectedBlock(renderer);
 		hud.Render();
-
-		player.HandleInput(window, deltaTime);
-
-		// if (terrain.GetPositionValue(player.GetPosition() + player.velocity).data.type == 0) 
-		player.Move(deltaTime);
 
 		glm::vec3 playerSelectedPosition = terrain.GetSelectedBlock(player.GetPosition(), player.camera.forward, player.placing);
 		if (playerSelectedPosition != player.GetPosition()) player.SetSelectedBlock(playerSelectedPosition);
 		else player.UnselectBlock();
 
-		player.Update(window, deltaTime, renderer);
 
 
 		glfwPollEvents();
 		glfwSwapBuffers(window);
 	}
 	chunkGeneration.detach();
+	gameTick.detach();
 }
 void HandleMouseInput(GLFWwindow* window, double xpos, double ypos) {
-	player.camera.ProcessCameraMouse(window, xpos, ypos);
+	InputManager::mouse.MouseCallback(window, xpos, ypos);
+	player.camera.ProcessCameraMouse();
 }
 void HandleKeyPress(GLFWwindow* window, int key, int scancode, int action, int mod) {
 	if ((key >= GLFW_KEY_1 && key <= GLFW_KEY_9) || key == GLFW_KEY_0) {
@@ -183,8 +205,10 @@ void ChunkGenerationThread() {
 int main() {
 	glfwInit();
 	window = CreateWindow("opengl", WIDTH, HEIGHT);
+	InputManager::window = window;
 	glewInit();
 
+	Time::fixedDeltaTime = 1.0f / TICK_FREQUENCY;
 	srand(time(NULL));
 
 	renderer.Initialize(vertexSource, fragmentSource);
@@ -197,15 +221,17 @@ int main() {
 	BlockDataManager::InitializeBlockDefs();
 	ItemDataManager::InitializeItemDefs();
 	terrain.biomeManager.InitializeBiomeDefs();
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	glfwSetCursorPosCallback(window, HandleMouseInput);
-	glfwSetKeyCallback(window, HandleKeyPress);
 
 	player.InitializePlayer();
 
 	chunkGeneration = std::thread(ChunkGenerationThread);
+	gameTick = std::thread(Tick);
 	terrain.UpdateRenderedChunks(player.GetPosition());
 
+	InputManager::Initialize();
+
+	glfwSetCursorPosCallback(window, HandleMouseInput);
+	glfwSetKeyCallback(window, HandleKeyPress);
 
 	glEnable(GL_DEPTH_TEST);
 	Update();

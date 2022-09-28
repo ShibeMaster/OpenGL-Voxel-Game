@@ -15,26 +15,39 @@ void Player::InitializePlayer() {
 	selectedBlockMesh = Mesh(cubevertices);
 	camera.position.y = 15.0f;
 }
-void Player::Update(GLFWwindow* window, float deltaTime, Renderer& renderer) {
-	velocity = glm::vec3(0.0f, 0.0f, 0.0f);
-	if (hasBlockSelected) RenderSelectedBlock(renderer);
+void Player::Update() {
+	HandleInput();
+
+	// if (!grounded)
+		// velocity = PhysicsExtensions::ApplyGravity(velocity);
+
+	// velocity = PhysicsExtensions::ApplyDrag(velocity);
 }
 
-void Player::HandleInput(GLFWwindow* window, float deltaTime) {
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		velocity += camera.forward;
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		velocity -= camera.forward;
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		velocity += camera.right;
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		velocity -= camera.right;
-	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
-		velocity -= camera.up;
-	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
-		velocity += camera.up;
-	if (glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS)
-		camera.position.y = 15.0f;
+void Player::Move() {
+	camera.position += velocity * Time::fixedDeltaTime;
+}
+
+void Player::HandleInput() {
+	if (InputManager::GetKeyDown(GLFW_KEY_F1)) {
+		camera.position.y = 32.0f;
+	}
+
+
+//	if (InputManager::GetKeyDown(GLFW_KEY_E) && grounded && glfwGetTime() - lastJumpTime > jumpCooldown)
+	//	Jump();
+
+	if (InputManager::IsMovingAny()) {
+		glm::vec3 newDir = glm::vec3(0.0f);
+		newDir += camera.forward * InputManager::MoveVert();
+		newDir += camera.right * InputManager::MoveHorz();
+		newDir += camera.worldUp * InputManager::MoveUpDown();
+		direction = newDir;
+
+		camera.position += (direction * speed * Time::fixedDeltaTime);
+//		velocity += (direction * speed);
+
+	}
 
 }
 
@@ -55,25 +68,25 @@ void Player::SetSelectedBlock(glm::vec3 position) {
 	hasBlockSelected = true;
 }
 void Player::SetGrounded(bool value) {
-	if (grounded && !value)
-		fallingSpeed = 0.0f;
+	if (!grounded && value)
+		velocity.y = 0.0f;
 
 	grounded = value;
 }
-void Player::ApplyGravity(float deltaTime) {
-	if (!grounded) {
-		fallingSpeed += 9.98f * deltaTime;
-		camera.position += dirdown * fallingSpeed * deltaTime;
-	}
-}
 void Player::Jump() {
-	if (grounded) {
-		camera.position.y += 1.2f;
-	}
+	velocity = PhysicsExtensions::AddImpulseForce(velocity, dirup * jumpForce);
+	lastJumpTime = glfwGetTime();
+	std::cout << "jumping" << std::endl;
 }
 void Player::UnselectBlock() {
 	hasBlockSelected = false;
 }
-void Player::Move(float deltaTime) {
-	camera.position += velocity * camera.speed * deltaTime;
+void Player::Collision() {
+	velocity = -velocity;
+	std::cout << "collided" << std::endl;
+}
+glm::vec3 Player::GetFeetPosition() {
+	glm::vec3 feetPos = GetPosition();
+	feetPos += dirdown * (playerHeight - 0.15f);
+	return feetPos;
 }

@@ -7,7 +7,7 @@ public:
 
 
 	// base item attributes
-	const ItemData itemdef_none = ItemData{ ItemType::item_none, ItemUsageType::usage_none, glm::vec4(0.0f, 0.0f, 0.0f, 0.0f), false };
+	const ItemData itemdef_none = ItemData{ ItemType::item_none, ItemUsageType::usage_none, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), false };
 
 	const ItemData itemdef_stone = ItemData{ ItemType::item_stone, ItemUsageType::usage_placeable, glm::vec4(0.66f, 0.66f, 0.66f, 1.0f), true };
 
@@ -17,7 +17,7 @@ public:
 
 	const ItemData itemdef_sand = ItemData{ ItemType::item_sand, ItemUsageType::usage_placeable, glm::vec4(0.76, 0.69f, 0.50f, 1.0f), true };
 
-	const ItemData itemdef_snow = ItemData{ ItemType::item_sand, ItemUsageType::usage_placeable, glm::vec4(0.54, 0.27f, 0.07f, 1.0f), true };
+	const ItemData itemdef_snow = ItemData{ ItemType::item_sand, ItemUsageType::usage_placeable, glm::vec4(0.8f, 0.8f, 0.8f, 1.0f), true };
 
 	const ItemData itemdef_leaf = ItemData{ ItemType::item_leaf, ItemUsageType::usage_placeable, glm::vec4(0.17f, 0.35f, 0.15f, 0.5f), true };
 

@@ -1,6 +1,7 @@
 #include "PlacingModule.h"
 void Modules::PlacingModule::Initialize(PlayerData* data) {
 	PlayerModule::Initialize(data);
+	SetupMesh();
 }
 void Modules::PlacingModule::Render(Renderer& renderer) {
 	renderer.shader.Use();

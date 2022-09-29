@@ -17,68 +17,20 @@
 #include "ItemDataManager.h"
 #include "InputManager.h"
 #include "Time.h"
+#include "Scene.h"
 #include "Mouse.h"
-
-
-const char* vertexSource = R"GLSL(
-#version 330 core
-
-layout (location = 0) in vec3 pos;
-layout (location = 1) in vec4 color;
-
-out vec4 Color;
-
-uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projection;
-
-
-void main(){
-	Color = color;
-	gl_Position = projection * view * model * vec4(pos, 1.0f);
-}
-)GLSL";
-
-const char* hudVertexSource = R"GLSL(
-#version 330 core
-
-layout (location = 0) in vec3 pos;
-layout (location = 1) in vec4 color;
-
-out vec4 Color;
-uniform mat4 model;
-
-
-void main(){
-	Color = color;
-	gl_Position = model * vec4(pos, 1.0f);
-}
-)GLSL";
-
-const char* fragmentSource = R"GLSL(
-#version 330 core
-
-in vec4 Color;
-
-out vec4 FragColor;
-
-void main(){
-	FragColor = Color;
-}
-)GLSL";
-
+#include "World.h"
 
 
 GLFWwindow* window;
-Renderer renderer;
-Hud hud;
-Terrain terrain;
-Player player;
-std::thread chunkGeneration;
 std::thread gameTick;
 
-float timeSinceLastPlaced = 0.0f;
-float timeSinceLastSwappedMode = 0.0f;
+
+// Scenes
+World *world = new World();
+
+// Starting Scenes
+Scene *activeScene;
 
 const float TICK_FREQUENCY = 50.0f;
 
@@ -97,39 +49,6 @@ GLFWwindow* CreateWindow(const char* title, int width, int height) {
 void ProcessInput() {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE))
 		glfwSetWindowShouldClose(window, true);
-
-	if (InputManager::GetKeyDown(GLFW_KEY_TAB) && glfwGetTime() - timeSinceLastPlaced >= 0.25f) {
-		hud.ToggleInventory();
-		timeSinceLastPlaced = glfwGetTime();
-	}
-	if (glfwGetKey(window, GLFW_KEY_C) && glfwGetTime() - timeSinceLastPlaced >= 0.25f) {
-		player.state.placingState = player.state.placingState == PlacingState::placingstate_breaking ? PlacingState::placingstate_placing : PlacingState::placingstate_breaking;		timeSinceLastPlaced = glfwGetTime();
-	}
-	if (glfwGetKey(window, GLFW_KEY_F3) && glfwGetTime() - timeSinceLastPlaced >= 0.25f) {
-		glm::vec2 chunkPos = terrain.GetChunkPosition(player.GetPosition());
-		std::cout << chunkPos.x << " | " << chunkPos.y << std::endl;
-		timeSinceLastPlaced = glfwGetTime();
-	}
-
-	if (InputManager::GetKeyDown(GLFW_KEY_F4) && glfwGetTime() - timeSinceLastPlaced >= 0.25f) {
-		player.data.inventory.TryAddItem(ItemType::item_testItem1);
-		timeSinceLastPlaced = glfwGetTime();
-	}
-	if (InputManager::GetKeyDown(GLFW_KEY_SPACE) && glfwGetTime() - timeSinceLastSwappedMode >= 0.25f && !hud.menuOpen) {
-		if(player.data.inventory.inventory[player.data.inventory.selectedIndex].data.usage == ItemUsageType::usage_consumable){}
-		else if (player.modules.placing.hasBlockSelected) {
-
-			if (player.state.placingState == placingstate_placing && player.data.inventory.inventory[player.data.inventory.selectedIndex].data.usage == ItemUsageType::usage_placeable) {
-				terrain.CreateBlock(player.modules.placing.selectedPosition, player.data.inventory.inventory[player.data.inventory.selectedIndex].data.type);
-				player.data.inventory.TryRemoveItem(player.data.inventory.selectedIndex);
-			}
-			else {
-				player.data.inventory.TryAddItem(BlockDataManager::GetBlockData((BlockType)terrain.GetPositionValue(player.modules.placing.selectedPosition))->item);
-				terrain.DestroyBlock(player.modules.placing.selectedPosition);
-			}
-		}
-		timeSinceLastSwappedMode = glfwGetTime();
-	}
 }
 void Tick() {
 	float lastTickTime = 0.0f;
@@ -138,9 +57,10 @@ void Tick() {
 	while (true) {
 		if (glfwGetTime() - lastTickTime >= 1.0f / TICK_FREQUENCY) {
 			lastTickTime = glfwGetTime();
+
+			activeScene->FixedUpdate();
 		//	player.SetGrounded(terrain.GetPositionValue(player.GetPosition() + dirdown * player.playerHeight) != 0);
 
-			player.FixedUpdate();
 		//	glm::vec3 playerNextFramePos = player.GetFeetPosition() + PhysicsExtensions::RemoveY(player.velocity) * Time::fixedDeltaTime;
 
 
@@ -153,51 +73,28 @@ void Tick() {
 void Update() {
 	while (!glfwWindowShouldClose(window)) {
 		Time::Update();
-
-		glm::mat4 model = glm::mat4(1.0f);
-		renderer.shader.SetMat4("model", model);
-
-		glm::mat4 view = player.data.camera.GetViewMatrix();
-		renderer.shader.SetMat4("view", view);
-
+			
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		ProcessInput();
-
-		player.Update();
-
-		terrain.MeshGeneration();
-		terrain.UpdateRenderedChunks(player.GetPosition());
-		terrain.RenderChunks(renderer);
-
-		if (player.modules.placing.hasBlockSelected) player.modules.placing.Render(renderer);
-		hud.Render();
-
-		glm::vec3 playerSelectedPosition = terrain.GetSelectedBlock(player.GetPosition(), player.data.camera.forward, player.state.placingState == PlacingState::placingstate_placing);
-		if (playerSelectedPosition != player.GetPosition()) player.modules.placing.SetSelectedBlock(playerSelectedPosition);
-		else player.modules.placing.UnselecteBlock();
-
-
+		activeScene->Update();
 
 		glfwPollEvents();
 		glfwSwapBuffers(window);
 	}
-	chunkGeneration.detach();
 	gameTick.detach();
 }
 void HandleMouseInput(GLFWwindow* window, double xpos, double ypos) {
 	InputManager::mouse.MouseCallback(window, xpos, ypos);
-	player.data.camera.ProcessCameraMouse();
+	activeScene->HandleMouseInput(window, xpos, ypos);
 }
 void HandleKeyPress(GLFWwindow* window, int key, int scancode, int action, int mod) {
-	if ((key >= GLFW_KEY_1 && key <= GLFW_KEY_9) || key == GLFW_KEY_0) {
-		player.data.inventory.selectedIndex = key == GLFW_KEY_0 ? 9 : key - 49;
-		hud.InventoryUpdated();
-	}
+	activeScene->HandleKeyPress(window, key, scancode, action, mod);
 }
-void ChunkGenerationThread() {
-	terrain.GenerationThread();
+void ChangeScenes(Scene* newScene) {
+	activeScene = newScene;
+	activeScene->Start();
 }
 int main() {
 	glfwInit();
@@ -205,26 +102,16 @@ int main() {
 	InputManager::window = window;
 	glewInit();
 
+
+	activeScene = world;
+	activeScene->Start();
+
 	Time::fixedDeltaTime = 1.0f / TICK_FREQUENCY;
 	srand(time(NULL));
-
-	renderer.Initialize(vertexSource, fragmentSource);
-
-	glm::mat4 projection = glm::perspective(45.0f, 800.0f / 800.0f, 0.1f, 100.0f);
-	renderer.shader.SetMat4("projection", projection);
-	
-	hud = Hud(hudVertexSource, fragmentSource, &player.data.inventory);
+	gameTick = std::thread(Tick);
 
 	BlockDataManager::InitializeBlockDefs();
 	ItemDataManager::InitializeItemDefs();
-	terrain.biomeManager.InitializeBiomeDefs();
-
-	player.Initialize();
-
-	chunkGeneration = std::thread(ChunkGenerationThread);
-	gameTick = std::thread(Tick);
-	terrain.UpdateRenderedChunks(player.GetPosition());
-
 	InputManager::Initialize();
 
 	glfwSetCursorPosCallback(window, HandleMouseInput);

@@ -76,6 +76,18 @@
     <Filter Include="Source Files\Player\Modules">
       <UniqueIdentifier>{2a27bb86-9c1e-4fad-a2dc-5b39d153f32e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Engine\Game">
+      <UniqueIdentifier>{ad3befe0-132f-45e9-8ca7-67b7802b6a07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Engine\Graphics">
+      <UniqueIdentifier>{92a451f1-3c4e-4721-993f-ed4c3b3bdbe7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Engine\Extensions">
+      <UniqueIdentifier>{2b508633-a169-4952-b2e8-a03e26a82c78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Engine\Game\Scenes">
+      <UniqueIdentifier>{7b670867-68ca-43e1-a597-efde8ccd60cd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -98,9 +110,6 @@
     </ClCompile>
     <ClCompile Include="BlockDataManager.cpp">
       <Filter>Source Files\Data\Blocks</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Source Files\Engine</Filter>
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
       <Filter>Source Files\Engine</Filter>
@@ -174,6 +183,18 @@
     <ClCompile Include="PlacingModule.cpp">
       <Filter>Source Files\Player\Modules</Filter>
     </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Instance.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="World.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Shaders.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BlockData.h">
@@ -197,20 +218,8 @@
     <ClInclude Include="Chunk.h">
       <Filter>Header Files\Terrain</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Header Files\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>Header Files\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>Header Files\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader.h">
-      <Filter>Header Files\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Header Files\Engine</Filter>
     </ClInclude>
     <ClInclude Include="BiomeManager.h">
       <Filter>Header Files\Terrain</Filter>
@@ -245,12 +254,6 @@
     <ClInclude Include="Time.h">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="PhysicsExtensions.h">
-      <Filter>Header Files\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="MathsExtensions.h">
-      <Filter>Header Files\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="PlayerData.h">
       <Filter>Header Files\Player</Filter>
     </ClInclude>
@@ -269,8 +272,35 @@
     <ClInclude Include="PlacingModule.h">
       <Filter>Header Files\Player\Modules</Filter>
     </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Header Files\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="MathsExtensions.h">
+      <Filter>Header Files\Engine\Extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsExtensions.h">
+      <Filter>Header Files\Engine\Extensions</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Header Files\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Header Files\Engine\Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="Camera.h">
-      <Filter>Header Files\Engine</Filter>
+      <Filter>Header Files\Engine\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Header Files\Engine\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Instance.h">
+      <Filter>Header Files\Engine\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="World.h">
+      <Filter>Header Files\Engine\Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Shaders.h">
+      <Filter>Header Files\Engine\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

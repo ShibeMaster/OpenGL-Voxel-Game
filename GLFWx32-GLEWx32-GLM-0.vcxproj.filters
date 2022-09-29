@@ -70,6 +70,12 @@
     <Filter Include="Source Files\Engine\Input">
       <UniqueIdentifier>{ede7b918-cddb-4b36-a52f-fdb420f73817}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Player\Modules">
+      <UniqueIdentifier>{8cd6f49f-2260-44a8-aab1-4ff5f51ef7f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Player\Modules">
+      <UniqueIdentifier>{2a27bb86-9c1e-4fad-a2dc-5b39d153f32e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -150,6 +156,24 @@
     <ClCompile Include="Time.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerData.cpp">
+      <Filter>Source Files\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerModules.cpp">
+      <Filter>Source Files\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerState.cpp">
+      <Filter>Source Files\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerModule.cpp">
+      <Filter>Source Files\Player\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="MovementModule.cpp">
+      <Filter>Source Files\Player\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="PlacingModule.cpp">
+      <Filter>Source Files\Player\Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BlockData.h">
@@ -180,9 +204,6 @@
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
-      <Filter>Header Files\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
       <Filter>Header Files\Player</Filter>
     </ClInclude>
     <ClInclude Include="Shader.h">
@@ -228,6 +249,27 @@
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
     <ClInclude Include="MathsExtensions.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerData.h">
+      <Filter>Header Files\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerState.h">
+      <Filter>Header Files\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerModules.h">
+      <Filter>Header Files\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerModule.h">
+      <Filter>Header Files\Player\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="MovementModule.h">
+      <Filter>Header Files\Player\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="PlacingModule.h">
+      <Filter>Header Files\Player\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
   </ItemGroup>

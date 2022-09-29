@@ -11,37 +11,30 @@
 #include "Inventory.h"
 #include "PhysicsExtensions.h"
 
+#include "PlayerState.h"
+#include "PlayerData.h"
+#include "PlayerModules.h"
+
 class Player
 {
 public:
-	Camera camera;
-	glm::vec3 selectedPosition;
-	bool hasBlockSelected = false;
-	bool placing = false;
-	bool grounded = false;
-	const int SELECTION_DISTANCE = 8;
-	float speed = 5.0f;
-	const float jumpForce = 5.0f;
-	const float playerHeight = 1.75f;
+	PlayerState state;
+	PlayerData data;
+	PlayerModules modules;
+
+
 	float lastJumpTime = 0.0f;
 	const float jumpCooldown = 0.25f;
 
-	Mesh selectedBlockMesh;
-	Inventory inventory;
 	float fallingSpeed;
-	glm::vec3 velocity;
-	glm::vec3 direction;
+
 	Player();
 	void Update();
-	void InitializePlayer();
-	void HandleInput();
-	void SetSelectedBlock(glm::vec3 position);
-	void UnselectBlock();
-	void RenderSelectedBlock(Renderer& renderer);
+	void FixedUpdate();
+	void Initialize();
 	void SetGrounded(bool value);
 	void Collision();
 	void Jump();
-	void Move();
 	glm::vec3 GetPosition();
 	glm::vec3 GetFeetPosition();
 };

@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 #include <map>
 #include "BlockDataManager.h"
+#include "MathsExtensions.h"
 
 const int MAX_GENERATION_HEIGHT = 32;
 const int MID_GENERATION_HEIGHT = 24;
@@ -57,31 +58,6 @@ public:
 	int precSeed;
 	int heightSeed;
 
-	BiomeManager() {
-		tempSeed = rand();
-		precSeed = rand();
-		heightSeed = rand();
-
-		temperature = FastNoiseLite(tempSeed);
-		temperature.SetNoiseType(FastNoiseLite::NoiseType_Cellular);
-		temperature.SetFrequency(0.005);
-		temperature.SetCellularDistanceFunction(FastNoiseLite::CellularDistanceFunction_EuclideanSq);
-
-		precipitation = FastNoiseLite(precSeed);
-		precipitation.SetNoiseType(FastNoiseLite::NoiseType_Cellular);
-		precipitation.SetFrequency(0.005);
-		precipitation.SetCellularDistanceFunction(FastNoiseLite::CellularDistanceFunction_EuclideanSq);
-
-		height = FastNoiseLite(heightSeed);
-		height.SetNoiseType(FastNoiseLite::NoiseType_Perlin);
-		height.SetFractalType(FastNoiseLite::FractalType_FBm);
-		height.SetFrequency(0.02);
-	}
-
-
-	// Biome Data
-
-
 	BiomeType defaultBiome = plains;
 
 	std::vector<BiomeType> availableBiomes = {
@@ -89,39 +65,9 @@ public:
 		snowField
 	};
 
-	// Methods
-	static float Lerp(float a, float b, float t) {
-		return a + (t * (b - a));
-	}
-
-	Biome* GetBiomeInformation(glm::vec2 position) {
-		Biome biome;
-		float temp = Lerp(-1.0f, 1.0f, abs(temperature.GetNoise(position.x, position.y)));
-		float prec = Lerp(-1.0f, 1.0f, abs(precipitation.GetNoise(position.x, position.y)));
-		std::vector<Biome*> possibleBiomes;
-		for (BiomeType type : availableBiomes) {
-			Biome* biome = GetBiomeData(type);
-			if (temp <= biome->maxTemp && temp >= biome->minTemp && prec <= biome->maxPrec && prec >= biome->minPrec) {
-				possibleBiomes.push_back(biome);
-			}
-		}
-		return possibleBiomes.size() == 0 ? (GetElevation(position) < MID_GENERATION_HEIGHT - 2) ? GetBiomeData(BiomeType::river) : GetBiomeData(defaultBiome) : possibleBiomes[rand() % possibleBiomes.size()];
-	}
-
-	void InitializeBiomeDefs() {
-
-		for (Biome biome : biomedefs) {
-			biomes[(int)biome.type] = biome;
-		}
-	}
-
-	Biome* GetBiomeData(BiomeType type) {
-		return &biomes[(int)type];
-	}
-
-	int GetElevation(glm::vec2 position) {
-		float noise = height.GetNoise(position.x, position.y);
-		int elevation = (int)Lerp(MID_GENERATION_HEIGHT, MAX_GENERATION_HEIGHT, noise);
-		return elevation;
-	}
+	BiomeManager();
+	Biome* GetBiomeInformation(glm::vec2 position);
+	void InitializeBiomeDefs();
+	Biome* GetBiomeData(BiomeType type);
+	int GetElevation(glm::vec2 position);
 };

@@ -67,6 +67,9 @@
     <Filter Include="Header Files\Engine\Input">
       <UniqueIdentifier>{6f2b881d-61d1-445c-a411-9124d3083288}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Engine\Input">
+      <UniqueIdentifier>{ede7b918-cddb-4b36-a52f-fdb420f73817}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -133,19 +136,19 @@
       <Filter>Source Files\Data\Items</Filter>
     </ClCompile>
     <ClCompile Include="InputManager.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Engine\Input</Filter>
     </ClCompile>
     <ClCompile Include="Mouse.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Time.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PhysicsExtensions.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Engine\Input</Filter>
     </ClCompile>
     <ClCompile Include="MathsExtensions.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsExtensions.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Time.cpp">
+      <Filter>Source Files\Engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -225,7 +228,7 @@
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
     <ClInclude Include="MathsExtensions.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

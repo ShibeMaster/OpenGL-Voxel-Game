@@ -25,6 +25,8 @@
     <ClCompile Include="BlockDefinitions.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Chunk.cpp" />
+    <ClCompile Include="ClientData.cpp" />
+    <ClCompile Include="ClientObject.cpp" />
     <ClCompile Include="CustomDataManager.cpp" />
     <ClCompile Include="HotbarSlot.cpp" />
     <ClCompile Include="Hud.cpp" />
@@ -40,6 +42,11 @@
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="MovementModule.cpp" />
+    <ClCompile Include="NetworkedPlayerContainer.cpp" />
+    <ClCompile Include="NetworkedPlayersManager.cpp" />
+    <ClCompile Include="NetworkInfo.cpp" />
+    <ClCompile Include="NetworkManager.cpp" />
+    <ClCompile Include="PhysicsCache.cpp" />
     <ClCompile Include="PhysicsExtensions.cpp" />
     <ClCompile Include="PlacingModule.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -51,6 +58,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Shaders.cpp" />
+    <ClCompile Include="Syncvar.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="World.cpp" />
@@ -62,6 +70,8 @@
     <ClInclude Include="BlockDefinitions.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Chunk.h" />
+    <ClInclude Include="ClientData.h" />
+    <ClInclude Include="ClientObject.h" />
     <ClInclude Include="CustomDataManager.h" />
     <ClInclude Include="HotbarSlot.h" />
     <ClInclude Include="Hud.h" />
@@ -76,6 +86,11 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="MovementModule.h" />
+    <ClInclude Include="NetworkedPlayerContainer.h" />
+    <ClInclude Include="NetworkedPlayersManager.h" />
+    <ClInclude Include="NetworkInfo.h" />
+    <ClInclude Include="NetworkManager.h" />
+    <ClInclude Include="PhysicsCache.h" />
     <ClInclude Include="PhysicsExtensions.h" />
     <ClInclude Include="PlacingModule.h" />
     <ClInclude Include="Player.h" />
@@ -88,6 +103,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Shaders.h" />
+    <ClInclude Include="Syncvar.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="World.h" />

@@ -8,7 +8,6 @@ Shader::Shader(const char* vertexSource, const char* fragmentSource) {
 
 	int vertexSuccess;
 	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &vertexSuccess);
-	std::cout << vertexSuccess << std::endl;
 
 	GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fragmentShader, 1, &fragmentSource, NULL);
@@ -16,7 +15,6 @@ Shader::Shader(const char* vertexSource, const char* fragmentSource) {
 
 	int fragmentSuccess;
 	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &fragmentSuccess);
-	std::cout << fragmentSuccess << std::endl;
 
 	id = glCreateProgram();
 	glAttachShader(id, vertexShader);

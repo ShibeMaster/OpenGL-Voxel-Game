@@ -14,6 +14,9 @@
 #include "PlayerState.h"
 #include "PlayerData.h"
 #include "PlayerModules.h"
+#include "PhysicsCache.h"
+
+#include "NetworkManager.h"
 
 class Player
 {
@@ -21,6 +24,7 @@ public:
 	PlayerState state;
 	PlayerData data;
 	PlayerModules modules;
+	PhysicsCache physicsCache;
 
 
 	float lastJumpTime = 0.0f;

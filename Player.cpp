@@ -9,6 +9,17 @@ void Player::Initialize() {
 void Player::Update() {
 	data.Update();
 	modules.Update();
+	if (((NetworkInfo::status == NetworkStatus::netstatus_server && NetworkManager::host.clientCount > 0) || NetworkInfo::status == NetworkStatus::netstatus_client) && glm::ivec3(data.camera.position) != glm::ivec3(physicsCache.lastFramePosition)) {
+		if (NetworkInfo::ClientExists(NetworkInfo::netid)) {
+			ClientObject* client = NetworkInfo::GetClient(NetworkInfo::netid);
+			client->playerData.x = (int)data.camera.position.x;
+			client->playerData.y = (int)data.camera.position.y;
+			client->playerData.z = (int)data.camera.position.z;
+			if (NetworkInfo::status == NetworkStatus::netstatus_server) NetworkManager::host.ManifestSync();
+			else NetworkManager::client.PostManifestUpdate();
+		}
+	}
+	physicsCache.CacheVariables(&data);
 }
 void Player::FixedUpdate() {
 	data.FixedUpdate();

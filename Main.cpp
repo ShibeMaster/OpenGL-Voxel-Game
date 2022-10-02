@@ -20,6 +20,8 @@
 #include "Scene.h"
 #include "Mouse.h"
 #include "World.h"
+#include "NetworkManager.h"
+#include <WinSock2.h>
 
 
 GLFWwindow* window;
@@ -36,8 +38,12 @@ const float TICK_FREQUENCY = 50.0f;
 
 const int WIDTH = 800;
 const int HEIGHT = 800;
+char** argv;
 
-GLFWwindow* CreateWindow(const char* title, int width, int height) {
+float lastActionTime = 0.0f;
+
+Syncvar syncVar;
+GLFWwindow* CreateDisplay(const char* title, int width, int height) {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -49,6 +55,23 @@ GLFWwindow* CreateWindow(const char* title, int width, int height) {
 void ProcessInput() {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE))
 		glfwSetWindowShouldClose(window, true);
+
+	if (InputManager::GetKeyDown(GLFW_KEY_F4) && glfwGetTime() - lastActionTime > 0.25f) {
+		lastActionTime = glfwGetTime();
+		std::cout << "started connecting" << std::endl;
+		NetworkManager::Connect(argv);
+	}
+	if (InputManager::GetKeyDown(GLFW_KEY_F5) && glfwGetTime() - lastActionTime > 0.25f) {
+		lastActionTime = glfwGetTime();
+		std::cout << "started hosting" << std::endl;
+		NetworkManager::Host();
+	}
+	if (InputManager::GetKeyDown(GLFW_KEY_F3) && glfwGetTime() - lastActionTime > 0.25f) {
+		int newValue;
+		std::cin >> newValue;
+		NetworkManager::HookSyncvar(newValue, &syncVar);
+		lastActionTime = glfwGetTime();
+	}
 }
 void Tick() {
 	float lastTickTime = 0.0f;
@@ -80,6 +103,7 @@ void Update() {
 		ProcessInput();
 		activeScene->Update();
 
+		
 		glfwPollEvents();
 		glfwSwapBuffers(window);
 	}
@@ -96,12 +120,15 @@ void ChangeScenes(Scene* newScene) {
 	activeScene = newScene;
 	activeScene->Start();
 }
-int main() {
+int	__cdecl main(int argc, char **argvP) {
 	glfwInit();
-	window = CreateWindow("opengl", WIDTH, HEIGHT);
+	window = CreateDisplay("opengl", WIDTH, HEIGHT);
 	InputManager::window = window;
 	glewInit();
 
+	argv = argvP;
+
+	NetworkManager::Initialize();
 
 	activeScene = world;
 	activeScene->Start();
@@ -113,6 +140,8 @@ int main() {
 	BlockDataManager::InitializeBlockDefs();
 	ItemDataManager::InitializeItemDefs();
 	InputManager::Initialize();
+
+	syncVar = Syncvar(5, 0, 1, &syncVar);
 
 	glfwSetCursorPosCallback(window, HandleMouseInput);
 	glfwSetKeyCallback(window, HandleKeyPress);

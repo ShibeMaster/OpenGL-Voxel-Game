@@ -7,6 +7,8 @@
 #include <thread>
 #include "Shaders.h"
 #include <iostream>
+#include "NetworkManager.h"
+#include "NetworkedPlayersManager.h"
 
 class World : public Scene
 {
@@ -38,6 +40,7 @@ public:
 		terrain.biomeManager.InitializeBiomeDefs();
 
 		player.Initialize();
+		NetworkedPlayersManager::Initialize();
 
 		std::cout << "started" << std::endl;
 		chunkGeneration = std::thread([this] { this->terrain.GenerationThread(); });
@@ -52,16 +55,7 @@ public:
 		if (InputManager::GetKeyDown(GLFW_KEY_C) && glfwGetTime() - timeSinceLastPlaced >= 0.25f) {
 			player.state.placingState = player.state.placingState == PlacingState::placingstate_breaking ? PlacingState::placingstate_placing : PlacingState::placingstate_breaking;		timeSinceLastPlaced = glfwGetTime();
 		}
-		if (InputManager::GetKeyDown(GLFW_KEY_F3) && glfwGetTime() - timeSinceLastPlaced >= 0.25f) {
-			glm::vec2 chunkPos = terrain.GetChunkPosition(player.GetPosition());
-			std::cout << chunkPos.x << " | " << chunkPos.y << std::endl;
-			timeSinceLastPlaced = glfwGetTime();
-		}
 
-		if (InputManager::GetKeyDown(GLFW_KEY_F4) && glfwGetTime() - timeSinceLastPlaced >= 0.25f) {
-			player.data.inventory.TryAddItem(ItemType::item_testItem1);
-			timeSinceLastPlaced = glfwGetTime();
-		}
 		if (InputManager::GetKeyDown(GLFW_KEY_SPACE) && glfwGetTime() - timeSinceLastSwappedMode >= 0.25f && !hud.menuOpen) {
 			if (player.data.inventory.inventory[player.data.inventory.selectedIndex].data.usage == ItemUsageType::usage_consumable) {}
 			else if (player.modules.placing.hasBlockSelected) {
@@ -105,6 +99,8 @@ public:
 		terrain.MeshGeneration();
 		terrain.UpdateRenderedChunks(player.GetPosition());
 		terrain.RenderChunks(renderer);
+
+		NetworkedPlayersManager::Render(renderer);
 
 		if (player.modules.placing.hasBlockSelected) player.modules.placing.Render(renderer);
 		hud.Render();

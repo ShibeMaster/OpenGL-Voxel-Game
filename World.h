@@ -7,7 +7,6 @@
 #include <thread>
 #include "Shaders.h"
 #include <iostream>
-#include "NetworkManager.h"
 #include "NetworkedPlayersManager.h"
 
 class World : public Scene
@@ -18,6 +17,12 @@ public:
 	Terrain terrain;
 	Player player;
 	std::thread chunkGeneration;
+
+
+
+
+	ManifestUpdateChannel updateChannel = ManifestUpdateChannel(3);
+	ManifestRequestChannel requestChannel = ManifestRequestChannel(4);
 
 
 	// need to move these to a playermodule or something
@@ -45,6 +50,9 @@ public:
 		std::cout << "started" << std::endl;
 		chunkGeneration = std::thread([this] { this->terrain.GenerationThread(); });
 		terrain.UpdateRenderedChunks(player.GetPosition());
+	
+		ShibaNetLib::NetworkChannelManager::AddNetworkChannel(&updateChannel);
+		ShibaNetLib::NetworkChannelManager::AddNetworkChannel(&requestChannel);
 	}
 	
 	void ProcessInput() {

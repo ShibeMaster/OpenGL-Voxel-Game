@@ -1,9 +1,11 @@
 #pragma once
+#include <glm/glm.hpp>
+
 struct NetworkedPlayerContainer
 {
 public:
-	int x;
-	int y;
-	int z;
+	glm::vec3 position;
+	glm::vec3 rotation;	
+	glm::vec3 color;
 };
 

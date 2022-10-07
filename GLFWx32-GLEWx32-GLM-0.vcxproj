@@ -26,6 +26,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Chunk.cpp" />
     <ClCompile Include="ClientData.cpp" />
+    <ClCompile Include="ClientManifestManager.cpp" />
     <ClCompile Include="ClientObject.cpp" />
     <ClCompile Include="CustomDataManager.cpp" />
     <ClCompile Include="HotbarSlot.cpp" />
@@ -45,7 +46,6 @@
     <ClCompile Include="NetworkedPlayerContainer.cpp" />
     <ClCompile Include="NetworkedPlayersManager.cpp" />
     <ClCompile Include="NetworkInfo.cpp" />
-    <ClCompile Include="NetworkManager.cpp" />
     <ClCompile Include="PhysicsCache.cpp" />
     <ClCompile Include="PhysicsExtensions.cpp" />
     <ClCompile Include="PlacingModule.cpp" />
@@ -71,6 +71,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Chunk.h" />
     <ClInclude Include="ClientData.h" />
+    <ClInclude Include="ClientManifestManager.h" />
     <ClInclude Include="ClientObject.h" />
     <ClInclude Include="CustomDataManager.h" />
     <ClInclude Include="HotbarSlot.h" />
@@ -89,7 +90,6 @@
     <ClInclude Include="NetworkedPlayerContainer.h" />
     <ClInclude Include="NetworkedPlayersManager.h" />
     <ClInclude Include="NetworkInfo.h" />
-    <ClInclude Include="NetworkManager.h" />
     <ClInclude Include="PhysicsCache.h" />
     <ClInclude Include="PhysicsExtensions.h" />
     <ClInclude Include="PlacingModule.h" />
@@ -181,15 +181,19 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\OpenGL\GL\GLFWx32\include;C:\OpenGL\GL\GLM;C:\OpenGL\GL\GLEWbin\include;C:\Users\tombr\Downloads\FastNoiseLiteCPP</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\OpenGL\GL\GLFWx32\include;C:\OpenGL\GL\GLM;C:\OpenGL\GL\GLEWbin\include;C:\Users\tombr\Downloads\FastNoiseLiteCPP;C:\Users\tombr\source\repos\Shiba-Networking-Library</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\OpenGL\GL\GLFWx32\lib-vc2022;C:\OpenGL\GL\GLEWbin\lib\Release\Win32;C:\Users\tombr\Downloads\FastNoiseLiteCPP;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;glfw3dll.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\OpenGL\GL\GLFWx32\lib-vc2022;C:\OpenGL\GL\GLEWbin\lib\Release\Win32;C:\Users\tombr\Downloads\FastNoiseLiteCPP;C:\Users\tombr\source\repos\Shiba-Networking-Library\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;glfw3dll.lib;glew32.lib;ShibaNetLib.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <ProjectReference>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>

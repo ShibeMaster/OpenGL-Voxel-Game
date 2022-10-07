@@ -2,7 +2,6 @@
 #include "NetworkInfo.h"
 #include "Renderer.h"
 #include "Mesh.h"
-#include "NetworkManager.h"
 class NetworkedPlayersManager
 {
 public:
@@ -12,11 +11,13 @@ public:
 	}
 	static void Render(Renderer& renderer) {
 		renderer.shader.Use();
-		if ((NetworkInfo::status == NetworkStatus::netstatus_server && NetworkManager::host.clientCount > 0) || NetworkInfo::status == NetworkStatus::netstatus_client) {
+		if ((ShibaNetLib::Network::conn.isServer && ShibaNetLib::Network::clientCount > 0) || !ShibaNetLib::Network::conn.isServer) {
 			for (ClientObject client : NetworkInfo::clientManifest) {
-				if (client.data.netid != NetworkInfo::netid) {
+				if (client.data.netid != ShibaNetLib::Network::conn.netId) {
 					glm::mat4 model = glm::mat4(1.0f);
-					model = glm::translate(model, glm::vec3((float)client.playerData.x, (float)client.playerData.y, (float)client.playerData.z));
+					model = glm::translate(model, client.playerData.position);
+					float max = max(client.playerData.rotation.x , client.playerData.rotation.y, client.playerData.rotation.z);
+					model = glm::rotate(model, glm::radians(max), client.playerData.rotation / max);
 					renderer.shader.SetMat4("model", model);
 					playerMesh.DrawMesh();
 				}

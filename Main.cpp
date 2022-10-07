@@ -20,9 +20,9 @@
 #include "Scene.h"
 #include "Mouse.h"
 #include "World.h"
-#include "NetworkManager.h"
 #include <WinSock2.h>
-
+#include <NetworkManager.h>
+#include "ClientManifestManager.h"
 
 GLFWwindow* window;
 std::thread gameTick;
@@ -38,7 +38,6 @@ const float TICK_FREQUENCY = 50.0f;
 
 const int WIDTH = 800;
 const int HEIGHT = 800;
-char** argv;
 
 float lastActionTime = 0.0f;
 
@@ -59,18 +58,15 @@ void ProcessInput() {
 	if (InputManager::GetKeyDown(GLFW_KEY_F4) && glfwGetTime() - lastActionTime > 0.25f) {
 		lastActionTime = glfwGetTime();
 		std::cout << "started connecting" << std::endl;
-		NetworkManager::Connect(argv);
+		ShibaNetLib::NetworkManager::StartClient();
 	}
 	if (InputManager::GetKeyDown(GLFW_KEY_F5) && glfwGetTime() - lastActionTime > 0.25f) {
 		lastActionTime = glfwGetTime();
 		std::cout << "started hosting" << std::endl;
-		NetworkManager::Host();
+		ShibaNetLib::NetworkManager::StartHost();
 	}
 	if (InputManager::GetKeyDown(GLFW_KEY_F3) && glfwGetTime() - lastActionTime > 0.25f) {
-		int newValue;
-		std::cin >> newValue;
-		NetworkManager::HookSyncvar(newValue, &syncVar);
-		lastActionTime = glfwGetTime();
+		ClientManifestManager::PostManifestSyncRequest();
 	}
 }
 void Tick() {
@@ -120,15 +116,14 @@ void ChangeScenes(Scene* newScene) {
 	activeScene = newScene;
 	activeScene->Start();
 }
-int	__cdecl main(int argc, char **argvP) {
+
+int	main() {
 	glfwInit();
 	window = CreateDisplay("opengl", WIDTH, HEIGHT);
 	InputManager::window = window;
 	glewInit();
 
-	argv = argvP;
-
-	NetworkManager::Initialize();
+	ShibaNetLib::NetworkManager::Initialize();
 
 	activeScene = world;
 	activeScene->Start();

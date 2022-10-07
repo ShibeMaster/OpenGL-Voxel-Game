@@ -9,16 +9,28 @@ void Player::Initialize() {
 void Player::Update() {
 	data.Update();
 	modules.Update();
-	if (((NetworkInfo::status == NetworkStatus::netstatus_server && NetworkManager::host.clientCount > 0) || NetworkInfo::status == NetworkStatus::netstatus_client) && glm::ivec3(data.camera.position) != glm::ivec3(physicsCache.lastFramePosition)) {
-		if (NetworkInfo::ClientExists(NetworkInfo::netid)) {
-			ClientObject* client = NetworkInfo::GetClient(NetworkInfo::netid);
-			client->playerData.x = (int)data.camera.position.x;
-			client->playerData.y = (int)data.camera.position.y;
-			client->playerData.z = (int)data.camera.position.z;
-			if (NetworkInfo::status == NetworkStatus::netstatus_server) NetworkManager::host.ManifestSync();
-			else NetworkManager::client.PostManifestUpdate();
+	if (((ShibaNetLib::Network::conn.isServer && ShibaNetLib::Network::clientCount > 0) || !ShibaNetLib::Network::conn.isServer) && ShibaNetLib::Network::state == ShibaNetLib::NetworkState::netstate_connected) {
+		if (NetworkInfo::ClientExists(ShibaNetLib::Network::conn.netId)) {
+			ClientObject* self = NetworkInfo::GetClient(ShibaNetLib::Network::conn.netId);
+			if (glm::ivec3(self->playerData.position) != glm::ivec3(data.camera.position) || self->playerData.rotation != data.camera.forward || self->playerData.color != data.inventory.inventory[data.inventory.selectedIndex].data.color) {
+				ClientObject* client = NetworkInfo::GetClient(ShibaNetLib::Network::conn.netId);
+				client->playerData.position = data.camera.position;
+				client->playerData.rotation = data.camera.forward;
+				client->playerData.color = data.inventory.inventory[data.inventory.selectedIndex].data.color;
+				ClientManifestManager::PostManifestUpdateRequest(*client);
+			};
+		}
+		else {
+			ClientObject client;
+			client.data.netid = ShibaNetLib::Network::conn.netId;
+			client.playerData.position = data.camera.position;
+			client.playerData.rotation = data.camera.forward;
+			client.playerData.color = data.inventory.inventory[data.inventory.selectedIndex].data.color;
+			NetworkInfo::clientManifest.push_back(client);
+			ClientManifestManager::PostManifestUpdateRequest(client);
 		}
 	}
+
 	physicsCache.CacheVariables(&data);
 }
 void Player::FixedUpdate() {

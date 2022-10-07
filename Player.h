@@ -11,12 +11,12 @@
 #include "Inventory.h"
 #include "PhysicsExtensions.h"
 
+#include "ClientManifestManager.h"
+
 #include "PlayerState.h"
 #include "PlayerData.h"
 #include "PlayerModules.h"
 #include "PhysicsCache.h"
-
-#include "NetworkManager.h"
 
 class Player
 {

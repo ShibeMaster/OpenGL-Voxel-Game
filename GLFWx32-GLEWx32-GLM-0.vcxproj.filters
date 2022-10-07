@@ -207,9 +207,6 @@
     <ClCompile Include="NetworkInfo.cpp">
       <Filter>Source Files\Network</Filter>
     </ClCompile>
-    <ClCompile Include="NetworkManager.cpp">
-      <Filter>Source Files\Network</Filter>
-    </ClCompile>
     <ClCompile Include="PhysicsCache.cpp">
       <Filter>Source Files\Player</Filter>
     </ClCompile>
@@ -224,6 +221,9 @@
     </ClCompile>
     <ClCompile Include="NetworkedPlayersManager.cpp">
       <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="ClientManifestManager.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -332,9 +332,6 @@
     <ClInclude Include="Shaders.h">
       <Filter>Header Files\Engine\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="NetworkManager.h">
-      <Filter>Header Files\Engine\Network</Filter>
-    </ClInclude>
     <ClInclude Include="Syncvar.h">
       <Filter>Header Files\Engine\Network</Filter>
     </ClInclude>
@@ -355,6 +352,9 @@
     </ClInclude>
     <ClInclude Include="NetworkedPlayersManager.h">
       <Filter>Header Files\Engine\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="ClientManifestManager.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

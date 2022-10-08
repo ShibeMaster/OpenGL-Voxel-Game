@@ -59,14 +59,16 @@ void ProcessInput() {
 		lastActionTime = glfwGetTime();
 		std::cout << "started connecting" << std::endl;
 		ShibaNetLib::NetworkManager::StartClient();
+		ShibaNetLib::Network::conn.showDebugMessages = true;
 	}
 	if (InputManager::GetKeyDown(GLFW_KEY_F5) && glfwGetTime() - lastActionTime > 0.25f) {
 		lastActionTime = glfwGetTime();
 		std::cout << "started hosting" << std::endl;
 		ShibaNetLib::NetworkManager::StartHost();
+		ShibaNetLib::Network::conn.showDebugMessages = true;
 	}
 	if (InputManager::GetKeyDown(GLFW_KEY_F3) && glfwGetTime() - lastActionTime > 0.25f) {
-		ClientManifestManager::PostManifestSyncRequest();
+		Terrain::chunks.clear();
 	}
 }
 void Tick() {

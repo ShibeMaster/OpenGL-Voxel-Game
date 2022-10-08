@@ -1,7 +1,11 @@
 #include "BiomeManager.h"
+#include <ctime>
 BiomeManager::BiomeManager() {
+	srand(time(0));
 	tempSeed = rand();
+	srand(time(0));
 	precSeed = rand();
+	srand(time(0));
 	heightSeed = rand();
 
 	temperature = FastNoiseLite(tempSeed);

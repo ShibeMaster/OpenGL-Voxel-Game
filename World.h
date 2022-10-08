@@ -24,6 +24,8 @@ public:
 	ManifestUpdateChannel updateChannel = ManifestUpdateChannel(3);
 	ManifestRequestChannel requestChannel = ManifestRequestChannel(4);
 
+	ChunkRequestChannel chunkRequestChannel = ChunkRequestChannel(5);
+	ChunkRequestCallbackChannel chunkRequestCallbackChannel = ChunkRequestCallbackChannel(6);
 
 	// need to move these to a playermodule or something
 	float timeSinceLastPlaced = 0.0f;
@@ -53,6 +55,10 @@ public:
 	
 		ShibaNetLib::NetworkChannelManager::AddNetworkChannel(&updateChannel);
 		ShibaNetLib::NetworkChannelManager::AddNetworkChannel(&requestChannel);
+
+		ShibaNetLib::NetworkChannelManager::AddNetworkChannel(&chunkRequestChannel);
+		ShibaNetLib::NetworkChannelManager::AddNetworkChannel(&chunkRequestCallbackChannel);
+
 	}
 	
 	void ProcessInput() {

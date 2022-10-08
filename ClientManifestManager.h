@@ -5,7 +5,6 @@
 struct ManifestUpdateMessage : public ShibaNetLib::NetworkMessage {
 	int clientId;
 	glm::vec3 position;
-	glm::vec3 rotation;
 };
 
 struct ManifestRequestMessage : public ShibaNetLib::NetworkMessage{};
@@ -19,13 +18,14 @@ public:
 		message.senderid = ShibaNetLib::Network::conn.netId;
 		message.clientId = client.data.netid;
 		message.position = client.playerData.position;
-		message.rotation = client.playerData.rotation;
 
 		ShibaNetLib::Network::conn.Send(&message, sizeof(ManifestUpdateMessage));
 	}
 	static void PostManifestSyncRequest() {
 		if (!ShibaNetLib::Network::conn.isServer) {
 			ManifestRequestMessage message;
+			message.channelid = 4;
+			message.senderid = ShibaNetLib::Network::conn.netId;
 			ShibaNetLib::Network::conn.Send(&message, sizeof(ManifestRequestMessage));
 		}
 		else
@@ -57,7 +57,6 @@ class ManifestUpdateChannel : public ShibaNetLib::NetworkChannel {
 		if (NetworkInfo::ClientExists(message->clientId)) {
 			ClientObject* client = NetworkInfo::GetClient(message->clientId);
 			client->playerData.position = message->position;
-			client->playerData.rotation = message->rotation;
 		}
 		else {
 			NetworkInfo::clientManifest.push_back(ClientObject(message->clientId, message->position));

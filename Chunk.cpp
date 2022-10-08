@@ -20,11 +20,11 @@ void Chunk::Generate(BiomeManager biomes) {
 				for (Layer layer : biome->layers)
 				{
 					if (height <= layer.maxGenerationHeight && height >= layer.minGenerationHeight && height - y <= layer.depth) {
-						chunk[x][y][z] = BlockDataManager::GetBlockData(layer.block)->type;
+						chunk[x][y][z] = std::byte((int)(BlockDataManager::GetBlockData(layer.block)->type));
 						found = true;
 					}
 				}
-				if (!found) chunk[x][y][z] = BlockDataManager::GetBlockData(biome->defaultBlock)->type;
+				if (!found) chunk[x][y][z] = std::byte((int)(BlockDataManager::GetBlockData(biome->defaultBlock)->type));
 			}
 
 		}
@@ -51,6 +51,7 @@ glm::vec3 Chunk::GetGlobalPosition(glm::vec3 position) {
 	return glm::vec3(position.x + chunkPos.x * 16, position.y, position.z + chunkPos.y * 16);
 }
 int Chunk::GetPositionValue(glm::vec3 position) {
-	if (!IsPositionInside(position)) return emptyBlock;
-	return chunk[(int)position.x][(int)position.y][(int)position.z];
+	if (!IsPositionInside(position)) return std::to_integer<int>(emptyBlock);
+
+	return std::to_integer<int>(chunk[(int)position.x][(int)position.y][(int)position.z]);
 }

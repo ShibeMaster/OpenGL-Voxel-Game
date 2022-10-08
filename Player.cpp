@@ -12,7 +12,7 @@ void Player::Update() {
 	if (((ShibaNetLib::Network::conn.isServer && ShibaNetLib::Network::clientCount > 0) || !ShibaNetLib::Network::conn.isServer) && ShibaNetLib::Network::state == ShibaNetLib::NetworkState::netstate_connected) {
 		if (NetworkInfo::ClientExists(ShibaNetLib::Network::conn.netId)) {
 			ClientObject* self = NetworkInfo::GetClient(ShibaNetLib::Network::conn.netId);
-			if (glm::ivec3(self->playerData.position) != glm::ivec3(data.camera.position) || self->playerData.rotation != data.camera.forward || self->playerData.color != data.inventory.inventory[data.inventory.selectedIndex].data.color) {
+			if (glm::ivec3(self->playerData.position) != glm::ivec3(data.camera.position)) {
 				ClientObject* client = NetworkInfo::GetClient(ShibaNetLib::Network::conn.netId);
 				client->playerData.position = data.camera.position;
 				client->playerData.rotation = data.camera.forward;

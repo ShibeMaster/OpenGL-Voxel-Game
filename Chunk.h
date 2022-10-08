@@ -7,6 +7,7 @@
 #include "Mesh.h"
 #include <vector>
 #include "BiomeManager.h"
+#include <stddef.h>
 
 // Layers
 // (height - y >= layerdepth &&) set layer block
@@ -28,12 +29,12 @@ enum ChunkState {
 class Chunk
 {
 public:
-	int chunk[16][32][16];
+	std::byte chunk[16][32][16];
 	glm::vec2 chunkPos;
 	ChunkState state = ChunkState::chunkstate_empty;
-
+	int segmentsLoaded = 0;
 	Mesh mesh;
-	int emptyBlock = 0;
+	std::byte emptyBlock = std::byte{ 0 };
 
 	Chunk(glm::vec2 pos);
 	Chunk() {}

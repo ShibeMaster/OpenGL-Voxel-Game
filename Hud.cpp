@@ -52,10 +52,10 @@ void Hud::PickupCheck() {
 		for (int x = 0; x < inventory->INVENTORY_WIDTH; x++) {
 			for (int y = 1; y < inventory->INVENTORY_HEIGHT; y++) {
 				int index = ((y * inventory->INVENTORY_WIDTH) - inventory->INVENTORY_WIDTH) + x;
-				if (inventoryHud[index].IsInBounds(InputManager::mouse.position))
-					std::cout << "in bounds" << std::endl;
-				else
-					std::cout << "X bounds: " << MathsExtensions::Lerp(400.0f, 800.0f, (inventoryHud[index].slot.position.x - (0.5f * inventoryHud[index].slot.scale.x))) << " | " << MathsExtensions::Lerp(400.0f, 800.0f, (inventoryHud[index].slot.position.x + (0.5f * inventoryHud[index].slot.scale.x))) << " | Y bounds: " << MathsExtensions::Lerp(400.0f, 800.0f, (inventoryHud[index].slot.position.y - (0.5f * inventoryHud[index].slot.scale.y))) << MathsExtensions::Lerp(400.0f, 800.0f, (inventoryHud[index].slot.position.y + (0.5f * inventoryHud[index].slot.scale.y))) << " | Mouse: " << InputManager::mouse.position.x << " | " << InputManager::mouse.position.y << std::endl;
+				if (inventoryHud[index].IsInBounds(InputManager::mouse.position)) {}
+					// std::cout << "in bounds" << std::endl;
+				else {}
+					// std::cout << "X bounds: " << MathsExtensions::Lerp(400.0f, 800.0f, (inventoryHud[index].slot.position.x - (0.5f * inventoryHud[index].slot.scale.x))) << " | " << MathsExtensions::Lerp(400.0f, 800.0f, (inventoryHud[index].slot.position.x + (0.5f * inventoryHud[index].slot.scale.x))) << " | Y bounds: " << MathsExtensions::Lerp(400.0f, 800.0f, (inventoryHud[index].slot.position.y - (0.5f * inventoryHud[index].slot.scale.y))) << MathsExtensions::Lerp(400.0f, 800.0f, (inventoryHud[index].slot.position.y + (0.5f * inventoryHud[index].slot.scale.y))) << " | Mouse: " << InputManager::mouse.position.x << " | " << InputManager::mouse.position.y << std::endl;
 			}
 		}
 	}

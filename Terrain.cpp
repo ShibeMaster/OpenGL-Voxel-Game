@@ -1,7 +1,7 @@
 #include "Terrain.h"
 std::unordered_map<glm::vec2, Chunk> Terrain::chunks;
-std::stack<Chunk*> Terrain::chunkGenerationQueue;
-std::stack<std::pair<Chunk*, std::vector<Vertex>>> Terrain::chunkMeshGenerationQueue;
+std::deque<Chunk*> Terrain::chunkGenerationQueue;
+std::deque<std::pair<Chunk*, std::vector<Vertex>>> Terrain::chunkMeshGenerationQueue;
 BiomeManager Terrain::biomeManager;
 Chunk* Terrain::loadedChunks[9][9];
 bool Terrain::CheckForChunkUpdates(glm::vec3 position) {
@@ -71,23 +71,23 @@ bool Terrain::IsChunkLoaded(Chunk* chunk) {
 void Terrain::GenerationThread() {
 	while (true) {
 		if (!chunkGenerationQueue.empty()) {
-			Chunk* chunk = chunkGenerationQueue.top();
+			Chunk* chunk = chunkGenerationQueue.front();
 			if (chunk->state == ChunkState::chunkstate_empty) {
 				chunk->Generate(biomeManager);
 				chunk->state = ChunkState::chunkstate_generated;
 			}
-			chunkGenerationQueue.pop();
+			chunkGenerationQueue.pop_front();
 			std::vector<Vertex> vertices = CreateChunkVertexArray(chunk);
-			chunkMeshGenerationQueue.push(std::pair(chunk, vertices));
+			chunkMeshGenerationQueue.push_back(std::pair(chunk, vertices));
 		}
 	}
 }
 void Terrain::MeshGeneration() {
 	while (!chunkMeshGenerationQueue.empty()) {
-		std::pair<Chunk*, std::vector<Vertex>> value = chunkMeshGenerationQueue.top();
+		std::pair<Chunk*, std::vector<Vertex>> value = chunkMeshGenerationQueue.front();
 		value.first->SetChunkMesh(value.second);
 		value.first->state = ChunkState::chunkstate_ready;
-		chunkMeshGenerationQueue.pop();
+		chunkMeshGenerationQueue.pop_front();
 	}
 }
 void Terrain::SetPosition(glm::vec3 position, int value) {
@@ -183,7 +183,7 @@ void Terrain::UpdateRenderedChunks(glm::vec3 position) {
 						networkUpdateRequiredChunks.push_back(chunkPos);
 					}
 					else
-						chunkGenerationQueue.push(loadedChunks[x][y]);
+						chunkGenerationQueue.push_back(loadedChunks[x][y]);
 				}
 				else loadedChunks[x][y] = &chunks[chunkPos];
 			}

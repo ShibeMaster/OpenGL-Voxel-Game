@@ -53,5 +53,6 @@ glm::vec3 Chunk::GetGlobalPosition(glm::vec3 position) {
 int Chunk::GetPositionValue(glm::vec3 position) {
 	if (!IsPositionInside(position)) return std::to_integer<int>(emptyBlock);
 
+
 	return std::to_integer<int>(chunk[(int)position.x][(int)position.y][(int)position.z]);
 }

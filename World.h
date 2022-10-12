@@ -7,6 +7,11 @@
 #include <thread>
 #include "Shaders.h"
 #include <iostream>
+#include "GUIButton.h"
+#include "GUIItem.h"
+#include "GUIPercentageBar.h"
+#include "GUICheckbox.h"
+#include "GUISlider.h"
 #include "NetworkedPlayersManager.h"
 
 class World : public Scene
@@ -18,9 +23,6 @@ public:
 	Player player;
 	std::thread chunkGeneration;
 
-
-
-
 	ManifestUpdateChannel updateChannel = ManifestUpdateChannel(3);
 	ManifestRequestChannel requestChannel = ManifestRequestChannel(4);
 
@@ -30,6 +32,7 @@ public:
 	// need to move these to a playermodule or something
 	float timeSinceLastPlaced = 0.0f;
 	float timeSinceLastSwappedMode = 0.0f;
+	float valueTest = 15.0f;
 
 	World() {
 		this->sceneId = 0;
@@ -59,6 +62,7 @@ public:
 		ShibaNetLib::NetworkChannelManager::AddNetworkChannel(&chunkRequestChannel);
 		ShibaNetLib::NetworkChannelManager::AddNetworkChannel(&chunkRequestCallbackChannel);
 
+		started = true;
 	}
 	
 	void ProcessInput() {
@@ -68,6 +72,14 @@ public:
 		}
 		if (InputManager::GetKeyDown(GLFW_KEY_C) && glfwGetTime() - timeSinceLastPlaced >= 0.25f) {
 			player.state.placingState = player.state.placingState == PlacingState::placingstate_breaking ? PlacingState::placingstate_placing : PlacingState::placingstate_breaking;		timeSinceLastPlaced = glfwGetTime();
+		}
+		if (InputManager::GetKeyDown(GLFW_KEY_F6) && glfwGetTime() - timeSinceLastPlaced > 0.1f) {
+			valueTest += 1.0f;
+			timeSinceLastPlaced = glfwGetTime();
+		}
+		if (InputManager::GetKeyDown(GLFW_KEY_F7) && glfwGetTime() - timeSinceLastPlaced > 0.1f) {
+			valueTest -= 1.0f;
+			timeSinceLastPlaced = glfwGetTime();
 		}
 
 		if (InputManager::GetKeyDown(GLFW_KEY_SPACE) && glfwGetTime() - timeSinceLastSwappedMode >= 0.25f && !hud.menuOpen) {

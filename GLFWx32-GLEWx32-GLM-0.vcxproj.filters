@@ -94,6 +94,9 @@
     <Filter Include="Source Files\Network">
       <UniqueIdentifier>{20f1bb56-0e31-4f9e-9d37-a8b9cb9b44b2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Engine\Gui Library">
+      <UniqueIdentifier>{7e88daf6-46de-42c5-bdfe-098df150cebb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -225,6 +228,12 @@
     <ClCompile Include="ClientManifestManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Text.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BlockData.h">
@@ -355,6 +364,39 @@
     </ClInclude>
     <ClInclude Include="ClientManifestManager.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIButton.h">
+      <Filter>Header Files\Engine\Gui Library</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIItem.h">
+      <Filter>Header Files\Engine\Gui Library</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowInfo.h">
+      <Filter>Header Files\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="GUICheckbox.h">
+      <Filter>Header Files\Engine\Gui Library</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIUtils.h">
+      <Filter>Header Files\Engine\Gui Library</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIPercentageBar.h">
+      <Filter>Header Files\Engine\Gui Library</Filter>
+    </ClInclude>
+    <ClInclude Include="GUISlider.h">
+      <Filter>Header Files\Engine\Gui Library</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenu.h">
+      <Filter>Header Files\Engine\Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Header Files\Engine\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIText.h">
+      <Filter>Header Files\Engine\Gui Library</Filter>
+    </ClInclude>
+    <ClInclude Include="Text.h">
+      <Filter>Header Files\Engine\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

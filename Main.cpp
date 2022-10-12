@@ -23,21 +23,19 @@
 #include <WinSock2.h>
 #include <NetworkManager.h>
 #include "ClientManifestManager.h"
+#include "WindowInfo.h"
+#include "MainMenu.h"
+#include "Text.h"
+#include "SceneManager.h"
 
 GLFWwindow* window;
 std::thread gameTick;
 
 
 // Scenes
-World *world = new World();
-
-// Starting Scenes
-Scene *activeScene;
+MainMenu menu;
 
 const float TICK_FREQUENCY = 50.0f;
-
-const int WIDTH = 800;
-const int HEIGHT = 800;
 
 float lastActionTime = 0.0f;
 
@@ -79,7 +77,8 @@ void Tick() {
 		if (glfwGetTime() - lastTickTime >= 1.0f / TICK_FREQUENCY) {
 			lastTickTime = glfwGetTime();
 
-			activeScene->FixedUpdate();
+			if(SceneManager::activeScene->started)
+				SceneManager::activeScene->FixedUpdate();
 		//	player.SetGrounded(terrain.GetPositionValue(player.GetPosition() + dirdown * player.playerHeight) != 0);
 
 		//	glm::vec3 playerNextFramePos = player.GetFeetPosition() + PhysicsExtensions::RemoveY(player.velocity) * Time::fixedDeltaTime;
@@ -99,7 +98,8 @@ void Update() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		ProcessInput();
-		activeScene->Update();
+		if(SceneManager::activeScene->started)
+			SceneManager::activeScene->Update();
 
 		
 		glfwPollEvents();
@@ -109,26 +109,23 @@ void Update() {
 }
 void HandleMouseInput(GLFWwindow* window, double xpos, double ypos) {
 	InputManager::mouse.MouseCallback(window, xpos, ypos);
-	activeScene->HandleMouseInput(window, xpos, ypos);
+	SceneManager::activeScene->HandleMouseInput(window, xpos, ypos);
 }
 void HandleKeyPress(GLFWwindow* window, int key, int scancode, int action, int mod) {
-	activeScene->HandleKeyPress(window, key, scancode, action, mod);
-}
-void ChangeScenes(Scene* newScene) {
-	activeScene = newScene;
-	activeScene->Start();
+	SceneManager::activeScene->HandleKeyPress(window, key, scancode, action, mod);
 }
 
 int	main() {
 	glfwInit();
-	window = CreateDisplay("opengl", WIDTH, HEIGHT);
+	window = CreateDisplay("opengl", SCREEN_WIDTH, SCREEN_HEIGHT);
 	InputManager::window = window;
 	glewInit();
 
 	ShibaNetLib::NetworkManager::Initialize();
 
-	activeScene = world;
-	activeScene->Start();
+	Font::Initialize();
+	Text::Initialize();
+	SceneManager::SetActiveScene(&menu);
 
 	Time::fixedDeltaTime = 1.0f / TICK_FREQUENCY;
 	srand(time(NULL));
@@ -136,7 +133,6 @@ int	main() {
 
 	BlockDataManager::InitializeBlockDefs();
 	ItemDataManager::InitializeItemDefs();
-	InputManager::Initialize();
 
 	syncVar = Syncvar(5, 0, 1, &syncVar);
 

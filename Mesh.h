@@ -4,6 +4,12 @@
 #include <iostream>
 #include <GL/glew.h>
 
+enum GUIAlignment {
+	alignment_left,
+	alignment_center,
+	alignment_right
+};
+
 struct Vertex {
 	glm::vec3 position;
 	glm::vec4 color;

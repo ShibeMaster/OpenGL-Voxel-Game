@@ -8,6 +8,7 @@ class Scene
 {
 public:
 	int sceneId = 5;
+	bool started = false;
 
 	Scene(){
 	}

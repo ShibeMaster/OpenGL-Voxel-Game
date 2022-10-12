@@ -19,7 +19,7 @@ void Mouse::MouseCallback(GLFWwindow* window, double xpos, double ypos) {
 	}
 
 	position.x = (float)xpos;
-	position.y = (float)ypos;
+	position.y = (float)800 - ypos;
 	lastMouseX = xpos;
 	lastMouseY = ypos;
 }

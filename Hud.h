@@ -8,7 +8,6 @@
 class Hud
 {
 private:
-	Renderer renderer;
 	Inventory* inventory;
 	std::vector<HudItem> hud;
 	HudItem selectedItemHud;
@@ -17,6 +16,7 @@ private:
 	float hotbarSlots = 9.0f;
 	int heldItemIndex = 0;
 public:
+	Renderer renderer;
 	bool menuOpen = false;
 
 	Hud();

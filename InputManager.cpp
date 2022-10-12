@@ -2,9 +2,6 @@
 GLFWwindow* InputManager::window;
 Mouse InputManager::mouse;
 
-void InputManager::Initialize() {
-	SetMouseLocked();
-}
 void InputManager::SetMouseUnlocked() {
 	mouse.inputLocked = true;
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);

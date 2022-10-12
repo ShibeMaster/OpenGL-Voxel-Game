@@ -12,7 +12,7 @@
 #include "FastNoiseLite.h"
 #include "BiomeManager.h"
 #include <iostream>
-#include <stack>
+#include <deque>
 #include <NetworkChannelManager.h>
 #include <Network.h>
 
@@ -36,8 +36,8 @@ public:
 	static const int CHUNK_LENGTH = 16;
 	static const int CHUNK_WIDTH = 16;
 	const int SEED = rand();
-	static std::stack<Chunk*> chunkGenerationQueue;
-	static std::stack<std::pair<Chunk*, std::vector<Vertex>>> chunkMeshGenerationQueue;
+	static std::deque<Chunk*> chunkGenerationQueue;
+	static std::deque<std::pair<Chunk*, std::vector<Vertex>>> chunkMeshGenerationQueue;
 	static BiomeManager biomeManager;
 	int emptyBlock = 0;
 
@@ -86,7 +86,7 @@ class ChunkRequestChannel : public ShibaNetLib::NetworkChannel {
 					chunk.Generate(Terrain::biomeManager);
 					chunk.state = ChunkState::chunkstate_generated;
 					Terrain::chunks[chunkPos] = chunk;
-					Terrain::chunkGenerationQueue.push(&Terrain::chunks[chunkPos]);
+					Terrain::chunkGenerationQueue.push_back(&Terrain::chunks[chunkPos]);
 					chunkQueue.pop_front();
 					chunkQueue.push_back(incoming);
 					continue;
@@ -142,7 +142,7 @@ class ChunkRequestCallbackChannel : public ShibaNetLib::NetworkChannel {
 				chunkQueue.pop_front();
 				if (Terrain::chunks[message.position].segmentsLoaded == 2) {
 					Terrain::chunks[message.position].state = ChunkState::chunkstate_generated;
-					Terrain::chunkMeshGenerationQueue.push(std::pair(&Terrain::chunks[message.position], Terrain::CreateChunkVertexArray(&Terrain::chunks[message.position])));
+					Terrain::chunkMeshGenerationQueue.push_back(std::pair(&Terrain::chunks[message.position], Terrain::CreateChunkVertexArray(&Terrain::chunks[message.position])));
 					std::cout << "finished unloading chunk" << std::endl;
 				}
 			}

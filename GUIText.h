@@ -20,17 +20,17 @@ public:
 		this->scale = scale;
 		this->color = color;
 		this->alignment = alignment;
-
+	}
+	glm::vec2 GetOffsetPosition() {
 		switch (alignment)
 		{
-		case GUIAlignment::alignment_left: this->position.x -= Font::GetStringLength(text, scale); break;
-		case GUIAlignment::alignment_center: this->position.x -= (Font::GetStringLength(text, scale) / 2); break;
+		case GUIAlignment::alignment_left: return glm::vec2(this->position.x - Font::GetStringLength(text, scale), this->position.y); break;
+		case GUIAlignment::alignment_center: return glm::vec2(this->position.x - (Font::GetStringLength(text, scale) / 2), this->position.y); break;
 		default:
 			break;
 		}
 	}
-
 	void Render() {
-		Text::RenderText(text, position, scale, color);
+		Text::RenderText(text, GetOffsetPosition(), scale, color);
 	}
 };

@@ -1,5 +1,6 @@
 #pragma once
 #include "GUIItem.h"
+#include "GUIText.h"
 #include <string>
 
 enum class SliderDirection {
@@ -35,10 +36,9 @@ public:
 
 	void UpdateBar(float percentage) {
 		if (setPercentage != percentage) {
-			std::cout << "bar updated" << std::endl;
 			switch (direction) {
-			case SliderDirection::SliderDirection_up: barMesh = GUIUtils::GenerateMesh(glm::vec2(position.x, position.y + dimensions.y), glm::vec2(dimensions.x, -dimensions.y * percentage), barColor, alignment); break;
-			case SliderDirection::SliderDirection_down: barMesh = GUIUtils::GenerateMesh(position, glm::vec2(dimensions.x, dimensions.y * percentage), barColor, alignment); break;
+			case SliderDirection::SliderDirection_up: barMesh = GUIUtils::GenerateMesh(position, glm::vec2(dimensions.x, dimensions.y * percentage), barColor, alignment); break;
+			case SliderDirection::SliderDirection_down: barMesh = GUIUtils::GenerateMesh(glm::vec2(position.x, position.y + dimensions.y), glm::vec2(dimensions.x, -dimensions.y * percentage), barColor, alignment); break;
 			case SliderDirection::SliderDirection_right: barMesh = GUIUtils::GenerateMesh(position, glm::vec2(dimensions.x * percentage, dimensions.y), barColor, alignment); break;
 			case SliderDirection::SliderDirection_left: barMesh = GUIUtils::GenerateMesh(glm::vec2(position.x + dimensions.x, position.y), glm::vec2(-dimensions.x * percentage, dimensions.y), barColor, alignment); break;
 			}

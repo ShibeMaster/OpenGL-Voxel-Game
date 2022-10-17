@@ -4,6 +4,8 @@
 #include "SceneManager.h"
 #include "Renderer.h"
 #include "Shaders.h"
+#include "GUIManager.h"
+#include "GUITextbox.h"
 #include "GUIText.h"
 
 class StartButton : public GUIButton {
@@ -18,10 +20,9 @@ public:
 };
 class MainMenu : public Scene {
 public:
-	Renderer renderer;
 	GUIText title;
+	GUITextbox textbox;
 	StartButton startButton;
-	GUICheckbox buttonTest2;
 	GUISlider slider;
 
 
@@ -29,21 +30,20 @@ public:
 	void Start() {
 		InputManager::SetMouseUnlocked();
 		startButton = StartButton(glm::vec2(400, 150), glm::vec2(250, 80), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), GUIAlignment::alignment_center, "Start", glm::vec3(0.0f, 0.0f, 0.0f));
-		buttonTest2 = GUICheckbox(glm::vec2(400, 400), glm::vec2(80, 80), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), GUIAlignment::alignment_center, "test button text test test", glm::vec3(1.0f, 1.0f, 1.0f));
-		title = GUIText("Quarry Craft", glm::vec2(400, 700), 1.0f, glm::vec3(1.0f, 1.0f, 1.0f), GUIAlignment::alignment_center);
-		slider = GUISlider(glm::vec2(400, 550), glm::vec2(350, 80), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), 0.0f, 10.0f, 5.0f, SliderDirection::SliderDirection_right, GUIAlignment::alignment_center, "test slider", true);
-		renderer.Initialize(Shaders::hudVertexSource, Shaders::fragmentSource);
+		title = GUIText("OpenGL Voxel Game", glm::vec2(400, 700), 1.0f, glm::vec3(1.0f, 1.0f, 1.0f), GUIAlignment::alignment_center);
+		slider = GUISlider(glm::vec2(400, 550), glm::vec2(350, 80), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), 0.0f, 10.0f, 5.0f, SliderDirection::SliderDirection_down, GUIAlignment::alignment_center, "test slider", false);
+		textbox = GUITextbox(glm::vec2(400, 400), glm::vec2(350, 80), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), 20, "test", "test textbox", GUIAlignment::alignment_center);
+
+		GUIManager::RegisterButton(&startButton);
+		GUIManager::RegisterSlider(&slider);
+		GUIManager::RegisterTextbox(&textbox);
 		started = true;
 	}
 
 	void Update() {
-		
-		startButton.CheckForPress();
-		buttonTest2.CheckForPress();
-		startButton.Render(renderer);
-		buttonTest2.Render(renderer);
-		slider.UpdateSliderPercent();
-		slider.Render(renderer);
 		title.Render();
+		textbox.Render(GUIManager::renderer);
+		startButton.Render(GUIManager::renderer);
+		slider.Render(GUIManager::renderer);
 	}
 };

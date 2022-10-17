@@ -26,6 +26,7 @@
 #include "WindowInfo.h"
 #include "MainMenu.h"
 #include "Text.h"
+#include "GUIManager.h"
 #include "SceneManager.h"
 
 GLFWwindow* window;
@@ -101,7 +102,6 @@ void Update() {
 		if(SceneManager::activeScene->started)
 			SceneManager::activeScene->Update();
 
-		
 		glfwPollEvents();
 		glfwSwapBuffers(window);
 	}
@@ -112,6 +112,7 @@ void HandleMouseInput(GLFWwindow* window, double xpos, double ypos) {
 	SceneManager::activeScene->HandleMouseInput(window, xpos, ypos);
 }
 void HandleKeyPress(GLFWwindow* window, int key, int scancode, int action, int mod) {
+	GUIManager::KeyCallback(window, key, scancode, action, mod);
 	SceneManager::activeScene->HandleKeyPress(window, key, scancode, action, mod);
 }
 
@@ -119,6 +120,7 @@ int	main() {
 	glfwInit();
 	window = CreateDisplay("opengl", SCREEN_WIDTH, SCREEN_HEIGHT);
 	InputManager::window = window;
+	WindowInfo::window = window;
 	glewInit();
 
 	ShibaNetLib::NetworkManager::Initialize();
@@ -131,6 +133,7 @@ int	main() {
 	srand(time(NULL));
 	gameTick = std::thread(Tick);
 
+	GUIManager::Initialize();
 	BlockDataManager::InitializeBlockDefs();
 	ItemDataManager::InitializeItemDefs();
 

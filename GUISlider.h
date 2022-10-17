@@ -17,27 +17,24 @@ public:
 		this->value = &sliderValue;
 		this->onlyFullNumbers = fullNumbers;
 	}
-	void UpdateSliderPercent() {
+	void UpdateSliderPercent(GLFWwindow* window, int button, int action) {
 
-		if (InputManager::GetKeyDown(GLFW_KEY_SPACE) && interactable ) {
+		if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS && interactable ) {
 			if (InputManager::mouse.position.x > position.x && InputManager::mouse.position.x < position.x + dimensions.x && InputManager::mouse.position.y > position.y && InputManager::mouse.position.y < position.y + dimensions.y) {
 				switch (direction)
 				{
-				case SliderDirection::SliderDirection_up: 
-					break;
-				case SliderDirection::SliderDirection_left:
-					break;
-				case SliderDirection::SliderDirection_right: sliderValue = MathsExtensions::Lerp(minValue, maxValue, MathsExtensions::InverseLerp(position.x, position.x + dimensions.x, InputManager::mouse.position.x));
-					if (onlyFullNumbers)
-						sliderValue = (int)sliderValue;
-					setPercentage = minValue - 1.0f;
-					UpdateBar(GetBarPercent());
-					break;
-				case SliderDirection::SliderDirection_down:
-					break;
+				case SliderDirection::SliderDirection_up: sliderValue = MathsExtensions::Lerp(minValue, maxValue, MathsExtensions::InverseLerp(position.y, position.y + dimensions.y, InputManager::mouse.position.y)); break;
+				case SliderDirection::SliderDirection_left: sliderValue = MathsExtensions::Lerp(minValue, maxValue, 1.0f - MathsExtensions::InverseLerp(position.x, position.x + dimensions.x, InputManager::mouse.position.x)); break;
+				case SliderDirection::SliderDirection_right: sliderValue = MathsExtensions::Lerp(minValue, maxValue, MathsExtensions::InverseLerp(position.x, position.x + dimensions.x, InputManager::mouse.position.x)); break;
+				case SliderDirection::SliderDirection_down: sliderValue = MathsExtensions::Lerp(minValue, maxValue,  1.0f - MathsExtensions::InverseLerp(position.y, position.y + dimensions.y, InputManager::mouse.position.y)); break;
 				default:
 					break;
 				}
+
+				if (onlyFullNumbers)
+					sliderValue = round(sliderValue);
+				setPercentage = minValue - 1.0f;
+				UpdateBar(GetBarPercent());
 			}
 		}
 	}

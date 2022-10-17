@@ -234,6 +234,12 @@
     <ClCompile Include="Text.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
+    <ClCompile Include="GUIManager.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowInfo.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BlockData.h">
@@ -397,6 +403,12 @@
     </ClInclude>
     <ClInclude Include="Text.h">
       <Filter>Header Files\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="GUITextbox.h">
+      <Filter>Header Files\Engine\Gui Library</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIManager.h">
+      <Filter>Header Files\Engine\Gui Library</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

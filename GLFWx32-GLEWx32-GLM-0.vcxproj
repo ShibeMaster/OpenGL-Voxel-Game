@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -29,6 +29,7 @@
     <ClCompile Include="ClientManifestManager.cpp" />
     <ClCompile Include="ClientObject.cpp" />
     <ClCompile Include="CustomDataManager.cpp" />
+    <ClCompile Include="GUIManager.cpp" />
     <ClCompile Include="HotbarSlot.cpp" />
     <ClCompile Include="Hud.cpp" />
     <ClCompile Include="HudItem.cpp" />
@@ -63,6 +64,7 @@
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="Time.cpp" />
+    <ClCompile Include="WindowInfo.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -70,6 +72,8 @@
     <ClInclude Include="BlockData.h" />
     <ClInclude Include="BlockDataManager.h" />
     <ClInclude Include="BlockDefinitions.h" />
+    <ClInclude Include="GUIManager.h" />
+    <ClInclude Include="GUITextbox.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="GUIButton.h" />
     <ClInclude Include="Camera.h" />

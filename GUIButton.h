@@ -19,15 +19,15 @@ public:
 		this->text = GUIText(text, glm::vec2(this->position.x + (this->dimensions.x / 2), this->position.y + (this->dimensions.y / 2)-5.0f), 0.5f, textColor, GUIAlignment::alignment_center);
 	}
 
-	virtual void CheckForPress() {
-		if (InputManager::GetKeyDown(GLFW_KEY_SPACE) && interactable && glfwGetTime() - cooldown > lastPressedTime) {
+	virtual void CheckForPress(GLFWwindow* window, int button, int action) {
+		if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS && interactable && glfwGetTime() - cooldown > lastPressedTime) {
 			if (InputManager::mouse.position.x > position.x && InputManager::mouse.position.x < position.x + dimensions.x && InputManager::mouse.position.y > position.y && InputManager::mouse.position.y < position.y + dimensions.y) {
 				lastPressedTime = glfwGetTime();
 				OnClicked();
 			}
 		}
 	}
-	void Render(Renderer& renderer) {
+	virtual void Render(Renderer& renderer) {
 		renderer.shader.Use();
 		glm::mat4 model = glm::mat4(1.0f);
 		renderer.shader.SetMat4("model", model);

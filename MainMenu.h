@@ -1,5 +1,6 @@
 #pragma once
 #include "Scene.h"
+#include "Resources.h"
 #include "GUIButton.h"
 #include "SceneManager.h"
 #include "Renderer.h"

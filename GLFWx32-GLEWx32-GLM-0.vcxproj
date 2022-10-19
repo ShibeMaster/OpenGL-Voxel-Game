@@ -22,13 +22,11 @@
     <ClCompile Include="BiomeManager.cpp" />
     <ClCompile Include="BlockData.cpp" />
     <ClCompile Include="BlockDataManager.cpp" />
-    <ClCompile Include="BlockDefinitions.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Chunk.cpp" />
     <ClCompile Include="ClientData.cpp" />
     <ClCompile Include="ClientManifestManager.cpp" />
     <ClCompile Include="ClientObject.cpp" />
-    <ClCompile Include="CustomDataManager.cpp" />
     <ClCompile Include="GUIManager.cpp" />
     <ClCompile Include="HotbarSlot.cpp" />
     <ClCompile Include="Hud.cpp" />
@@ -38,7 +36,6 @@
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="ItemData.cpp" />
     <ClCompile Include="ItemDataManager.cpp" />
-    <ClCompile Include="ItemDefinitions.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MathsExtensions.cpp" />
     <ClCompile Include="Mesh.cpp" />
@@ -56,6 +53,7 @@
     <ClCompile Include="PlayerModules.cpp" />
     <ClCompile Include="PlayerState.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="Resources.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -71,9 +69,9 @@
     <ClInclude Include="BiomeManager.h" />
     <ClInclude Include="BlockData.h" />
     <ClInclude Include="BlockDataManager.h" />
-    <ClInclude Include="BlockDefinitions.h" />
     <ClInclude Include="GUIManager.h" />
     <ClInclude Include="GUITextbox.h" />
+    <ClInclude Include="Resources.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="GUIButton.h" />
     <ClInclude Include="Camera.h" />
@@ -81,7 +79,6 @@
     <ClInclude Include="ClientData.h" />
     <ClInclude Include="ClientManifestManager.h" />
     <ClInclude Include="ClientObject.h" />
-    <ClInclude Include="CustomDataManager.h" />
     <ClInclude Include="GUICheckbox.h" />
     <ClInclude Include="GUIItem.h" />
     <ClInclude Include="GUIPercentageBar.h" />
@@ -96,7 +93,6 @@
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="ItemData.h" />
     <ClInclude Include="ItemDataManager.h" />
-    <ClInclude Include="ItemDefinitions.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="MathsExtensions.h" />
     <ClInclude Include="Mesh.h" />
@@ -114,7 +110,6 @@
     <ClInclude Include="PlayerModules.h" />
     <ClInclude Include="PlayerState.h" />
     <ClInclude Include="Renderer.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Shader.h" />
@@ -198,7 +193,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\OpenGL\GL\GLFWx32\include;C:\OpenGL\GL\GLM;C:\OpenGL\GL\GLEWbin\include;C:\Users\tombr\Downloads\FastNoiseLiteCPP;C:\Users\tombr\source\repos\Shiba-Networking-Library;C:\Users\tombr\Downloads\freetype-windows-binaries-2.12.1\freetype-windows-binaries-2.12.1\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\OpenGL\GL\GLFWx32\include;C:\OpenGL\GL\GLM;C:\OpenGL\GL\GLEWbin\include;C:\Users\tombr\Downloads\FastNoiseLiteCPP;C:\Users\tombr\source\repos\Shiba-Networking-Library;C:\Users\tombr\Downloads\freetype-windows-binaries-2.12.1\freetype-windows-binaries-2.12.1\include;C:\Users\tombr\Downloads\CPPJson\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>

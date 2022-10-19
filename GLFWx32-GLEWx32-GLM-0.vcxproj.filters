@@ -19,12 +19,6 @@
     <Filter Include="Source Files\Hud">
       <UniqueIdentifier>{8c3cf549-9a5c-463c-84bf-06f3c482c188}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Custom Data">
-      <UniqueIdentifier>{95a76d1b-b6cb-4b0a-8929-a0e3a673c273}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Custom Data">
-      <UniqueIdentifier>{39105159-db6f-4804-9bd1-b435b591ac52}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Terrain">
       <UniqueIdentifier>{df7d21ab-e470-44d6-b900-925b2146d154}</UniqueIdentifier>
     </Filter>
@@ -114,9 +108,6 @@
     <ClCompile Include="HotbarSlot.cpp">
       <Filter>Source Files\Hud</Filter>
     </ClCompile>
-    <ClCompile Include="CustomDataManager.cpp">
-      <Filter>Source Files\Custom Data</Filter>
-    </ClCompile>
     <ClCompile Include="BlockDataManager.cpp">
       <Filter>Source Files\Data\Blocks</Filter>
     </ClCompile>
@@ -144,14 +135,8 @@
     <ClCompile Include="Terrain.cpp">
       <Filter>Source Files\Terrain</Filter>
     </ClCompile>
-    <ClCompile Include="BlockDefinitions.cpp">
-      <Filter>Source Files\Custom Data</Filter>
-    </ClCompile>
     <ClCompile Include="ItemData.cpp">
       <Filter>Source Files\Data\Items</Filter>
-    </ClCompile>
-    <ClCompile Include="ItemDefinitions.cpp">
-      <Filter>Source Files\Custom Data</Filter>
     </ClCompile>
     <ClCompile Include="ItemDataManager.cpp">
       <Filter>Source Files\Data\Items</Filter>
@@ -240,13 +225,13 @@
     <ClCompile Include="WindowInfo.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
+    <ClCompile Include="Resources.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BlockData.h">
       <Filter>Header Files\Data\Blocks</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BlockDataManager.h">
       <Filter>Header Files\Data\Blocks</Filter>
@@ -256,9 +241,6 @@
     </ClInclude>
     <ClInclude Include="Hud.h">
       <Filter>Header Files\Hud</Filter>
-    </ClInclude>
-    <ClInclude Include="CustomDataManager.h">
-      <Filter>Header Files\Custom Data</Filter>
     </ClInclude>
     <ClInclude Include="Chunk.h">
       <Filter>Header Files\Terrain</Filter>
@@ -271,12 +253,6 @@
     </ClInclude>
     <ClInclude Include="HotbarSlot.h">
       <Filter>Header Files\Hud\Inventory</Filter>
-    </ClInclude>
-    <ClInclude Include="BlockDefinitions.h">
-      <Filter>Header Files\Custom Data</Filter>
-    </ClInclude>
-    <ClInclude Include="ItemDefinitions.h">
-      <Filter>Header Files\Custom Data</Filter>
     </ClInclude>
     <ClInclude Include="ItemData.h">
       <Filter>Header Files\Data\Item</Filter>
@@ -409,6 +385,9 @@
     </ClInclude>
     <ClInclude Include="GUIManager.h">
       <Filter>Header Files\Engine\Gui Library</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -20,6 +20,7 @@
 #include "Scene.h"
 #include "Mouse.h"
 #include "World.h"
+#include "Resources.h"
 #include <WinSock2.h>
 #include <NetworkManager.h>
 #include "ClientManifestManager.h"
@@ -134,8 +135,7 @@ int	main() {
 	gameTick = std::thread(Tick);
 
 	GUIManager::Initialize();
-	BlockDataManager::InitializeBlockDefs();
-	ItemDataManager::InitializeItemDefs();
+	Resources::InitializeDirectories();
 
 	syncVar = Syncvar(5, 0, 1, &syncVar);
 

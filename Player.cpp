@@ -1,9 +1,10 @@
 #include "Player.h"
 
 Player::Player() {
-	data.camera = Camera(glm::vec3(0.0f, 15.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f);
+	data.camera = Camera(glm::vec3(0.0f, 20.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f);
 }
 void Player::Initialize() {
+	data.Initialize(&state);
 	modules.Initialize(&data);
 }
 void Player::Update() {
@@ -31,7 +32,6 @@ void Player::Update() {
 		}
 	}
 
-	physicsCache.CacheVariables(&data);
 }
 void Player::FixedUpdate() {
 	data.FixedUpdate();

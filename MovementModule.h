@@ -10,7 +10,6 @@ namespace Modules {
 	public:
 		void Update();
 		void ManageInput();
-		void ApplyVelocity();
 	};
 
 }

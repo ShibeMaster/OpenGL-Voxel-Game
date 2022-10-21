@@ -46,4 +46,11 @@ public:
 	bool IsPositionInside(glm::vec3 localPos);
 	int GetPositionValue(glm::vec3 position);
 	glm::vec3 ClampChunkPosition(glm::vec3 position);
+	int operator[](glm::ivec3 rhs) {
+
+		if (!IsPositionInside(rhs)) return std::to_integer<int>(emptyBlock);
+
+
+		return std::to_integer<int>(chunk[rhs.x][rhs.y][rhs.z]);
+	}
 };

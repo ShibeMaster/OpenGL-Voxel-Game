@@ -39,19 +39,19 @@ public:
 	static std::deque<Chunk*> chunkGenerationQueue;
 	static std::deque<std::pair<Chunk*, std::vector<Vertex>>> chunkMeshGenerationQueue;
 	static BiomeManager biomeManager;
-	int emptyBlock = 0;
+	static int emptyBlock;
 
 	static bool CheckForChunkUpdates(glm::vec3 position);
 	glm::vec3 GetSelectedBlock(glm::vec3 position, glm::vec3 forward, bool placing);
 	bool Raycast(glm::vec3 startingPosition, glm::vec3 direction, int distance);
 	glm::vec3 ClampChunkY(glm::vec3 position);
 	static glm::vec2 GetChunkPosition(glm::vec3 position);
-	Chunk* GetPositionChunk(glm::vec3 position);
+	static Chunk* GetPositionChunk(glm::vec3 position);
 	Chunk* GetPositionChunkPointer(glm::vec3 position);
 	int GetPositionValueChunk(Chunk* chunk, glm::vec3 position);
 	static bool ChunkExists(glm::vec2 chunkpos);
-	glm::vec3 GetLocalPosition(glm::vec3 position);
-	int GetPositionValue(glm::vec3 globalPos);
+	static glm::vec3 GetLocalPosition(glm::vec3 position);
+	static int GetPositionValue(glm::vec3 globalPos);
 	bool IsChunkLoaded(Chunk* chunk);
 	void GenerationThread();
 	void MeshGeneration();

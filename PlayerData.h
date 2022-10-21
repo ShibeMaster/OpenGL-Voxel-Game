@@ -2,12 +2,14 @@
 #include "Camera.h"
 #include "Mesh.h"
 #include "Inventory.h"
+#include "PhysicsObject.h"
 #include "PlayerState.h"
 
 class PlayerData
 {
 public:
 	PlayerState* state;
+	PhysicsObject physics;
 
 	Camera camera;
 	glm::vec3 velocity;
@@ -22,7 +24,7 @@ public:
 
 #pragma region Stats
 	int selectionDistance = 8;
-	float speed = 5.0f;
+	float speed = 2.0f;
 	float jumpForce = 5.0f;
 	float height = 1.75f;
 

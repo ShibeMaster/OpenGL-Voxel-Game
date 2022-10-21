@@ -2,7 +2,7 @@
 #include <glm/glm.hpp>
 #include "Time.h"
 
-const float drag = 5.0f;
+const float drag = 9.0f;
 const glm::vec3 gravityDirection = glm::vec3(0.0f, -1.0f, 0.0f);
 const float gravity = 9.98f;
 

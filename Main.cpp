@@ -67,9 +67,6 @@ void ProcessInput() {
 		ShibaNetLib::NetworkManager::StartHost();
 		ShibaNetLib::Network::conn.showDebugMessages = true;
 	}
-	if (InputManager::GetKeyDown(GLFW_KEY_F3) && glfwGetTime() - lastActionTime > 0.25f) {
-		Terrain::chunks.clear();
-	}
 }
 void Tick() {
 	float lastTickTime = 0.0f;

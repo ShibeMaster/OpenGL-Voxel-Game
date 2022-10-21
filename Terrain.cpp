@@ -1,6 +1,8 @@
 #include "Terrain.h"
 std::unordered_map<glm::vec2, Chunk> Terrain::chunks;
 std::deque<Chunk*> Terrain::chunkGenerationQueue;
+int Terrain::emptyBlock = 0;
+
 std::deque<std::pair<Chunk*, std::vector<Vertex>>> Terrain::chunkMeshGenerationQueue;
 BiomeManager Terrain::biomeManager;
 Chunk* Terrain::loadedChunks[9][9];
@@ -32,7 +34,7 @@ glm::vec3 Terrain::ClampChunkY(glm::vec3 position) {
 	return glm::clamp(position, glm::vec3(position.x, 0.0f, position.z), glm::vec3(position.x, 32.0f, position.z));
 }
 glm::vec2 Terrain::GetChunkPosition(glm::vec3 position) {
-	return glm::round(glm::vec2(position.x / 16, position.z / 16));
+	return glm::floor(glm::vec2(floor(position.x) / 16, floor(position.z) / 16));
 }
 Chunk* Terrain::GetPositionChunk(glm::vec3 position) {
 	glm::vec2 chunkPosition = GetChunkPosition(position);
@@ -51,8 +53,8 @@ bool Terrain::ChunkExists(glm::vec2 chunkpos) {
 	return chunks.find(chunkpos) != chunks.end();
 }
 glm::vec3 Terrain::GetLocalPosition(glm::vec3 position) {
-	int posx = (int)position.x % 16;
-	int posz = (int)position.z % 16;
+	int posx = (int)floor(position.x) % 16;
+	int posz = (int)floor(position.z) % 16;
 	return glm::vec3(posx < 0 ? 16 + posx : posx, position.y, posz < 0 ? 16 + posz : posz);
 }
 int Terrain::GetPositionValue(glm::vec3 globalPos) {

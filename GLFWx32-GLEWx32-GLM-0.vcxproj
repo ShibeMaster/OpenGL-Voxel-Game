@@ -22,6 +22,7 @@
     <ClCompile Include="BiomeManager.cpp" />
     <ClCompile Include="BlockData.cpp" />
     <ClCompile Include="BlockDataManager.cpp" />
+    <ClCompile Include="BoundingBox.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Chunk.cpp" />
     <ClCompile Include="ClientData.cpp" />
@@ -46,6 +47,7 @@
     <ClCompile Include="NetworkInfo.cpp" />
     <ClCompile Include="PhysicsCache.cpp" />
     <ClCompile Include="PhysicsExtensions.cpp" />
+    <ClCompile Include="PhysicsObject.cpp" />
     <ClCompile Include="PlacingModule.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerData.cpp" />
@@ -69,8 +71,10 @@
     <ClInclude Include="BiomeManager.h" />
     <ClInclude Include="BlockData.h" />
     <ClInclude Include="BlockDataManager.h" />
+    <ClInclude Include="BoundingBox.h" />
     <ClInclude Include="GUIManager.h" />
     <ClInclude Include="GUITextbox.h" />
+    <ClInclude Include="PhysicsObject.h" />
     <ClInclude Include="Resources.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="GUIButton.h" />

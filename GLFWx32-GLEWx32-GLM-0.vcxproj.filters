@@ -91,6 +91,9 @@
     <Filter Include="Header Files\Engine\Gui Library">
       <UniqueIdentifier>{7e88daf6-46de-42c5-bdfe-098df150cebb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Engine\Physics">
+      <UniqueIdentifier>{13a51da0-9466-4d11-b9f8-e1e2c61fb2dc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -226,6 +229,12 @@
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
     <ClCompile Include="Resources.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BoundingBox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -388,6 +397,12 @@
     </ClInclude>
     <ClInclude Include="Resources.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsObject.h">
+      <Filter>Header Files\Engine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundingBox.h">
+      <Filter>Header Files\Engine\Physics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

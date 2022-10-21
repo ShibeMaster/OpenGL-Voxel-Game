@@ -32,7 +32,6 @@ public:
 	// need to move these to a playermodule or something
 	float timeSinceLastPlaced = 0.0f;
 	float timeSinceLastSwappedMode = 0.0f;
-	float valueTest = 15.0f;
 
 	World() {
 		this->sceneId = 0;
@@ -73,15 +72,13 @@ public:
 		if (InputManager::GetKeyDown(GLFW_KEY_C) && glfwGetTime() - timeSinceLastPlaced >= 0.25f) {
 			player.state.placingState = player.state.placingState == PlacingState::placingstate_breaking ? PlacingState::placingstate_placing : PlacingState::placingstate_breaking;		timeSinceLastPlaced = glfwGetTime();
 		}
-		if (InputManager::GetKeyDown(GLFW_KEY_F6) && glfwGetTime() - timeSinceLastPlaced > 0.1f) {
-			valueTest += 1.0f;
-			timeSinceLastPlaced = glfwGetTime();
+		if (InputManager::GetKeyDown(GLFW_KEY_F3)) {
+			player.data.camera.position.y = 27.0f;
+			player.data.camera.position.x = 0.0f;
+			player.data.camera.position.z = 0.0f;
+			player.data.physics.velocity.y = 0.0f;
+			std::cout << player.data.camera.position.x << " | " << player.data.camera.position.y << " | " << player.data.camera.position.z << std::endl;
 		}
-		if (InputManager::GetKeyDown(GLFW_KEY_F7) && glfwGetTime() - timeSinceLastPlaced > 0.1f) {
-			valueTest -= 1.0f;
-			timeSinceLastPlaced = glfwGetTime();
-		}
-
 		if (InputManager::GetKeyDown(GLFW_KEY_SPACE) && glfwGetTime() - timeSinceLastSwappedMode >= 0.25f && !hud.menuOpen) {
 			if (player.data.inventory.inventory[player.data.inventory.selectedIndex].data.usage == ItemUsageType::usage_consumable) {}
 			else if (player.modules.placing.hasBlockSelected) {
@@ -128,7 +125,7 @@ public:
 
 		NetworkedPlayersManager::Render(renderer);
 
-		if (player.modules.placing.hasBlockSelected) player.modules.placing.Render(renderer);
+		if(player.modules.placing.hasBlockSelected) player.modules.placing.Render(renderer);
 		hud.Render();
 
 		glm::vec3 playerSelectedPosition = terrain.GetSelectedBlock(player.GetPosition(), player.data.camera.forward, player.state.placingState == PlacingState::placingstate_placing);

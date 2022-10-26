@@ -4,6 +4,7 @@
 #include <string>
 #include "Transform.h"
 #include "Renderer.h"
+
 struct Object {
 	Transform transform;
 	std::vector<Vertex> vertices;

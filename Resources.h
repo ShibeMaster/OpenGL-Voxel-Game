@@ -103,12 +103,23 @@ public:
 				json transformRotation = jsonObject["transform"]["rotation"];
 				json transformScale = jsonObject["transform"]["scale"];
 
-				object.transform = Transform{ glm::vec3(transformPosition["x"], transformPosition["y"], transformPosition["z"]), glm::vec3(transformRotation["x"], transformRotation["y"], transformRotation["z"]), glm::vec3(transformScale["x"], transformScale["y"], transformScale["z"]) };
-				for (auto jsonVertex : jsonObject["vertices"]) {
-					json jsonVertPosition = jsonVertex["position"];
-					json jsonColor = jsonVertex["color"];
-					Vertex vertex = Vertex{ glm::vec3(jsonVertPosition[0], jsonVertPosition[1], jsonVertPosition[2]), glm::vec4(jsonColor[0], jsonColor[1], jsonColor[2], jsonColor[3]) };
-					object.vertices.push_back(vertex);
+				object.transform = Transform{ glm::vec3(transformPosition[0], transformPosition[1], transformPosition[2]), glm::vec3(transformRotation[0], transformRotation[1], transformRotation[2]), glm::vec3(transformScale[0], transformScale[1], transformScale[2]) };
+				
+				if (jsonObject["type"] == "custom") {
+					for (auto jsonVertex : jsonObject["vertices"]) {
+						json jsonVertPosition = jsonVertex["position"];
+						json jsonColor = jsonVertex["color"];
+						Vertex vertex = Vertex{ glm::vec3(jsonVertPosition[0], jsonVertPosition[1], jsonVertPosition[2]), glm::vec4(jsonColor[0], jsonColor[1], jsonColor[2], jsonColor[3]) };
+						object.vertices.push_back(vertex);
+					}
+				}
+				else if (jsonObject["type"] == "cube") {
+					for (int i = 0; i < 36 * 3; i += 3) {
+						Vertex vertex;
+						vertex.color = glm::vec4(jsonObject["color"][0], jsonObject["color"][1], jsonObject["color"][2], jsonObject["color"][3]);
+						vertex.position = glm::vec3(vertices[i], vertices[i + 1], vertices[i + 2]);
+						object.vertices.push_back(vertex);
+					}
 				}
 				model.objects.push_back(object);
 			}

@@ -1,0 +1,96 @@
+{
+    "name": "cube",
+    "objects": [
+        {
+            "name": "left_foot",
+            "type": "cube",
+            "transform": {
+                "position": [ -0.3, 0, 0],
+                "rotation": [ 0, 0, 0],
+                "scale": [ 0.4, 1, 0.4 ]
+            },
+            "color": [ 0.0, 0.0, 1.0, 1.0 ]
+        },
+        {
+            "name": "right_foot",
+            "type": "cube",
+            "transform": {
+                "position": [ 0.3, 0, 0],
+                "rotation": [ 0, 0, 0],
+                "scale": [ 0.4, 1, 0.4 ]
+            },
+            "color": [ 0.0, 0.0, 1.0, 1.0 ]
+        },
+        {
+            "name": "body",
+            "type": "cube",
+            "transform": {
+                "position": [ 0, 1.125, 0],
+                "rotation": [ 0, 0, 0],
+                "scale": [ 1, 1.25, 0.5 ]
+            },
+            "color": [ 0.0, 0.5, 0.5, 1.0 ]
+        },
+        {
+            "name": "right_arm",
+            "type": "cube",
+            "transform": {
+                "position": [ 0.6, 1.2, 0],
+                "rotation": [ 0, 0, 0],
+                "scale": [ 0.25, 1, 0.25 ]
+            },
+            "color": [ 0.0, 0.75, 0.5, 1.0 ]
+        },
+        {
+            "name": "left_arm",
+            "type": "cube",
+            "transform": {
+                "position": [ -0.6, 1.2, 0],
+                "rotation": [ 0, 0, 0],
+                "scale": [ 0.25, 1, 0.25 ]
+            },
+            "color": [ 0.0, 0.75, 0.5, 1.0 ]
+        },
+        {
+            "name": "head",
+            "type": "cube",
+            "transform": {
+                "position": [ 0, 2, 0],
+                "rotation": [ 0, 0, 0],
+                "scale": [ 0.5, 0.5, 0.5 ]
+            },
+            "color": [ 0.0, 0.75, 0.5, 1.0 ]
+        },
+        {
+            "name": "face_mouth",
+            "type": "cube",
+            "transform": {
+                "position": [ 0.0, 1.9, 0.25],
+                "rotation": [ 0, 0, 0],
+                "scale": [ 0.25, 0.05, 0.05 ]
+            },
+            "color": [ 1.0, 1.0, 1.0, 1.0 ]
+        },
+        {
+            "name": "face_eye_left",
+            "type": "cube",
+            "transform": {
+                "position": [ -0.1, 2.1, 0.25],
+                "rotation": [ 0, 0, 0],
+                "scale": [ 0.05, 0.05, 0.05 ]
+            },
+            "color": [ 1.0, 1.0, 1.0, 1.0 ]
+        },
+        {
+            "name": "face_eye_left",
+            "type": "cube",
+            "transform": {
+                "position": [ 0.1, 2.1, 0.25],
+                "rotation": [ 0, 0, 0],
+                "scale": [ 0.05, 0.05, 0.05 ]
+            },
+            "color": [ 1.0, 1.0, 1.0, 1.0 ]
+        }
+    ]
+    
+}

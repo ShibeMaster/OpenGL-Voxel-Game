@@ -1,19 +1,15 @@
 #include "Terrain.h"
-std::unordered_map<glm::vec2, Chunk> Terrain::chunks;
-std::deque<Chunk*> Terrain::chunkGenerationQueue;
+std::unordered_map<glm::vec3, Chunk> Terrain::chunks;
+std::deque<glm::vec3> Terrain::chunkGenerationQueue;
 int Terrain::emptyBlock = 0;
 
 std::deque<std::pair<Chunk*, std::vector<Vertex>>> Terrain::chunkMeshGenerationQueue;
 BiomeManager Terrain::biomeManager;
-Chunk* Terrain::loadedChunks[9][9];
+std::vector<Chunk*> Terrain::loadedChunks;
+glm::vec3 Terrain::centeredChunkPosition = glm::vec3(1.0f);
+
 bool Terrain::CheckForChunkUpdates(glm::vec3 position) {
-	if (ChunkExists(GetChunkPosition(position))) {
-		if (loadedChunks[5][5]->chunkPos != GetChunkPosition(position)) {
-			return true;
-		}
-	}
-	else return true;
-	return false;
+	return centeredChunkPosition != GetChunkPosition(position);
 }
 glm::vec3 Terrain::GetSelectedBlock(glm::vec3 position, glm::vec3 forward, bool placing) {
 	for (int i = 0; i < 8; i++) {
@@ -31,56 +27,58 @@ bool Terrain::Raycast(glm::vec3 startingPosition, glm::vec3 direction, int dista
 	return false;
 }
 glm::vec3 Terrain::ClampChunkY(glm::vec3 position) {
-	return glm::clamp(position, glm::vec3(position.x, 0.0f, position.z), glm::vec3(position.x, 32.0f, position.z));
+	return glm::clamp(position, glm::vec3(position.x, 0.0f, position.z), glm::vec3(position.x, 16.0f, position.z));
 }
-glm::vec2 Terrain::GetChunkPosition(glm::vec3 position) {
-	return glm::floor(glm::vec2(floor(position.x) / 16, floor(position.z) / 16));
+glm::vec3 Terrain::GetChunkPosition(glm::vec3 position) {
+	return glm::floor(glm::vec3((int)floor(position.x) / CHUNK_WIDTH, (int)floor(position.y) / CHUNK_HEIGHT, (int)floor(position.z) / CHUNK_LENGTH));
 }
 Chunk* Terrain::GetPositionChunk(glm::vec3 position) {
-	glm::vec2 chunkPosition = GetChunkPosition(position);
+	glm::vec3 chunkPosition = GetChunkPosition(position);
 
 	return &chunks[chunkPosition];
 }
 Chunk* Terrain::GetPositionChunkPointer(glm::vec3 position) {
-	glm::vec2 chunkPosition = GetChunkPosition(position);
+	glm::vec3 chunkPosition = GetChunkPosition(position);
 	return &chunks[chunkPosition];
 }
 int Terrain::GetPositionValueChunk(Chunk* chunk, glm::vec3 position) {
 	if (chunk->IsPositionInside(position)) return chunk->GetPositionValue(position);
 	else return GetLoadedPositionValue(position);
 }
-bool Terrain::ChunkExists(glm::vec2 chunkpos) {
+bool Terrain::ChunkExists(glm::vec3 chunkpos) {
 	return chunks.find(chunkpos) != chunks.end();
 }
 glm::vec3 Terrain::GetLocalPosition(glm::vec3 position) {
 	int posx = (int)floor(position.x) % 16;
+	int posy = (int)floor(position.y) % 16;
 	int posz = (int)floor(position.z) % 16;
-	return glm::vec3(posx < 0 ? 16 + posx : posx, position.y, posz < 0 ? 16 + posz : posz);
+	return glm::vec3(posx < 0 ? 16 + posx : posx, posy, posz < 0 ? 16 + posz : posz);
 }
 int Terrain::GetPositionValue(glm::vec3 globalPos) {
 	if (!ChunkExists(GetChunkPosition(globalPos))) return emptyBlock;
 	return GetPositionChunk(globalPos)->GetPositionValue(GetLocalPosition(globalPos));
 }
 bool Terrain::IsChunkLoaded(Chunk* chunk) {
-	for (int x = 0; x < LOADED_RADIUS; x++) {
-		for (int y = 0; y < LOADED_RADIUS; y++) {
-			if (loadedChunks[x][y] == chunk) return true;
-		}
+	return chunk->chunkPos.x > centeredChunkPosition.x - LOADED_RADIUS && chunk->chunkPos.x < centeredChunkPosition.x + LOADED_RADIUS && chunk->chunkPos.y > centeredChunkPosition.y - LOADED_RADIUS && chunk->chunkPos.y < centeredChunkPosition.y + LOADED_RADIUS && chunk->chunkPos.z > centeredChunkPosition.z - LOADED_RADIUS && chunk->chunkPos.z < centeredChunkPosition.z + LOADED_RADIUS;
+}
+void Terrain::ChunkGeneration(glm::vec3 chunkPos) {
+	chunks[chunkPos].startedGeneration = true;
+	chunks[chunkPos].Generate(biomeManager);
+	if (chunks[chunkPos].state != ChunkState::chunkstate_empty) {
+		std::vector<Vertex> vertices = CreateChunkVertexArray(&chunks[chunkPos]);
+		chunkMeshGenerationQueue.push_back(std::pair(&chunks[chunkPos], vertices));
 	}
-	return false;
+	else
+		std::cout << "empty" << std::endl;
 }
 
 void Terrain::GenerationThread() {
 	while (true) {
 		if (!chunkGenerationQueue.empty()) {
-			Chunk* chunk = chunkGenerationQueue.front();
-			if (chunk->state == ChunkState::chunkstate_empty) {
-				chunk->Generate(biomeManager);
-				chunk->state = ChunkState::chunkstate_generated;
-			}
+			glm::vec3 chunkPos = chunkGenerationQueue.front();
+			ChunkGenerationManager::generationThreads[chunkPos] = std::thread(ChunkGeneration, chunkPos);
+			ChunkGenerationManager::generationThreads[chunkPos].join();
 			chunkGenerationQueue.pop_front();
-			std::vector<Vertex> vertices = CreateChunkVertexArray(chunk);
-			chunkMeshGenerationQueue.push_back(std::pair(chunk, vertices));
 		}
 	}
 }
@@ -89,7 +87,7 @@ void Terrain::MeshGeneration() {
 		std::pair<Chunk*, std::vector<Vertex>> value = chunkMeshGenerationQueue.front();
 		value.first->SetChunkMesh(value.second);
 		value.first->state = ChunkState::chunkstate_ready;
-		chunkMeshGenerationQueue.pop_front();
+		chunkMeshGenerationQueue.pop_front(); 
 	}
 }
 void Terrain::SetPosition(glm::vec3 position, int value) {
@@ -136,9 +134,9 @@ std::vector<CubeFace> Terrain::GetVisibleFaces(Chunk* chunk, glm::vec3 position)
 
 std::vector<Vertex> Terrain::CreateChunkVertexArray(Chunk* chunk) {
 	std::vector<Vertex> chunkvertices;
-	for (int x = 0; x < 16; x++) {
-		for (int y = 0; y < 32; y++) {
-			for (int z = 0; z < 16; z++) {
+	for (int x = 0; x < CHUNK_WIDTH; x++) {
+		for (int y = 0; y < CHUNK_HEIGHT; y++) {
+			for (int z = 0; z < CHUNK_LENGTH; z++) {
 				glm::vec3 localPos = glm::vec3(x, y, z);
 				BlockData* block = BlockDataManager::GetBlockData((BlockType)chunk->GetPositionValue(localPos));
 				glm::vec3 chunkGlobalOrigin = chunk->GetChunkGlobalOrigin();
@@ -160,11 +158,9 @@ std::vector<Vertex> Terrain::CreateChunkVertexArray(Chunk* chunk) {
 
 void Terrain::RenderChunks(Renderer& renderer) {
 	renderer.shader.Use();
-	for (int x = 0; x < LOADED_RADIUS; x++) {
-		for (int y = 0; y < LOADED_RADIUS; y++) {
-			if (loadedChunks[x][y]->state == ChunkState::chunkstate_ready)
-				loadedChunks[x][y]->RenderChunk(renderer);
-		}
+	for (Chunk* chunk : loadedChunks) {
+		if (chunk->state == ChunkState::chunkstate_ready)
+			chunk->RenderChunk(renderer);
 	}
 }
 void Terrain::UpdateChunkMesh(Chunk* chunk) {
@@ -172,26 +168,36 @@ void Terrain::UpdateChunkMesh(Chunk* chunk) {
 }
 void Terrain::UpdateRenderedChunks(glm::vec3 position) {
 	if (CheckForChunkUpdates(position)) {
-		std::vector<glm::vec2> networkUpdateRequiredChunks;
-		for (int x = 0; x < LOADED_RADIUS; x++) {
-			for (int y = 0; y < LOADED_RADIUS; y++) {
-				glm::vec2 chunkPos = GetChunkPosition(position + glm::vec3((x - floor(LOADED_RADIUS / 2)) * CHUNK_WIDTH, 0, (y - floor(LOADED_RADIUS / 2)) * CHUNK_LENGTH));
-				if (!ChunkExists(chunkPos)) {
-					Chunk chunk = Chunk(chunkPos);
-					chunks[chunkPos] = chunk;
-					loadedChunks[x][y] = &chunks[chunkPos];
+		std::cout << position.x << " | " << position.z << std::endl;
+		std::cout << "chunk update" << std::endl;
 
-					if (!ShibaNetLib::Network::conn.isServer && ShibaNetLib::Network::state == ShibaNetLib::NetworkState::netstate_connected) {
-						networkUpdateRequiredChunks.push_back(chunkPos);
+		centeredChunkPosition = GetChunkPosition(position);
+		loadedChunks.clear();
+		std::vector<glm::vec3> networkUpdateRequiredChunks;
+		for (int x = -LOADED_RADIUS; x < LOADED_RADIUS; x++) {
+			for (int y = -LOADED_RADIUS; y < LOADED_RADIUS; y++) {
+				for (int z = -LOADED_RADIUS; z < LOADED_RADIUS; z++)
+				{
+					glm::vec3 chunkPos = GetChunkPosition(position + glm::vec3(x * CHUNK_WIDTH, y * CHUNK_HEIGHT, z * CHUNK_LENGTH));
+					if (chunkPos.y > 0) {
+						if (!ChunkExists(chunkPos)) {
+							Chunk chunk = Chunk(chunkPos);
+							chunks[chunkPos] = chunk;
+							loadedChunks.push_back(&chunks[chunkPos]);
+
+							if (!ShibaNetLib::Network::conn.isServer && ShibaNetLib::Network::state == ShibaNetLib::NetworkState::netstate_connected) {
+								networkUpdateRequiredChunks.push_back(chunkPos);
+							}
+							else
+								chunkGenerationQueue.push_back(chunkPos);
+						}
+						else loadedChunks.push_back(&chunks[chunkPos]);
 					}
-					else
-						chunkGenerationQueue.push_back(loadedChunks[x][y]);
 				}
-				else loadedChunks[x][y] = &chunks[chunkPos];
 			}
 		}
 		if (!networkUpdateRequiredChunks.empty()) {
-			for (glm::vec2 pos : networkUpdateRequiredChunks) {
+			for (glm::vec3 pos : networkUpdateRequiredChunks) {
 
 				ChunkRequestMessage message;
 				message.channelid = 5;

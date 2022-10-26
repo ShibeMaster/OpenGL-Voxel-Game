@@ -7,11 +7,12 @@ glm::vec3 PhysicsExtensions::AddImpulseForce(glm::vec3 vec, glm::vec3 force) {
 	return vec + force;
 }
 glm::vec3 PhysicsExtensions::ApplyDrag(glm::vec3 vec) {
-	glm::vec3 vector = RemoveY(vec);
+	// glm::vec3 vector = RemoveY(vec);
+	glm::vec3 vector = vec;
 	float multiplier = 1.0f - drag * Time::fixedDeltaTime;
 	if (multiplier < 0.0f) multiplier = 0.0f;
 	vector *= multiplier;
-	vector.y = vec.y;
+	// vector.y = vec.y;
 	return vector;
 }
 glm::vec3 PhysicsExtensions::ApplyGravity(glm::vec3 velocity) {

@@ -4,6 +4,7 @@
 #include <filesystem>
 #include "BlockData.h"
 #include <iostream>
+#include "Model.h"
 #include "ItemData.h"
 #include "BlockDataManager.h"
 #include "ItemDataManager.h"
@@ -25,6 +26,7 @@ public:
 		std::filesystem::create_directory(ResourcesPath + "blocks");
 		std::filesystem::create_directory(ResourcesPath + "biomes");
 		std::filesystem::create_directory(ResourcesPath + "items");
+		std::filesystem::create_directory(ResourcesPath + "models");
 		LoadResources();
 	}
 	#pragma region Loading Data
@@ -68,6 +70,55 @@ public:
 		item.color = glm::vec3(data["color"]["r"], data["color"]["g"], data["color"]["b"]);
 		item.stackable = data["stackable"];
 		return item;
+	}
+	static bool ResourcesUpdated(std::string resourcePath, std::string oldJson) {
+
+		try {
+			std::ifstream file(ResourcesPath + resourcePath + ".json");
+			std::string data;
+			if (file) {
+				std::ostringstream ss;
+				ss << file.rdbuf(); // reading data
+				data = ss.str();
+			}
+			file.close();
+			return oldJson != data;
+		}
+		catch (int e) {
+			std::cout << "error " << e << std::endl;
+			return false;
+		}
+	}
+	static Model LoadModel(std::string resource) {
+		std::cout << resource << std::endl;
+		try {
+			std::ifstream file(ResourcesPath + resource + ".json");
+			json data = json::parse(file);
+			file.close();
+			Model model;
+			model.name = data["name"];
+			for (auto jsonObject : data["objects"]) {
+				Object object;
+				json transformPosition = jsonObject["transform"]["position"];
+				json transformRotation = jsonObject["transform"]["rotation"];
+				json transformScale = jsonObject["transform"]["scale"];
+
+				object.transform = Transform{ glm::vec3(transformPosition["x"], transformPosition["y"], transformPosition["z"]), glm::vec3(transformRotation["x"], transformRotation["y"], transformRotation["z"]), glm::vec3(transformScale["x"], transformScale["y"], transformScale["z"]) };
+				for (auto jsonVertex : jsonObject["vertices"]) {
+					json jsonVertPosition = jsonVertex["position"];
+					json jsonColor = jsonVertex["color"];
+					Vertex vertex = Vertex{ glm::vec3(jsonVertPosition[0], jsonVertPosition[1], jsonVertPosition[2]), glm::vec4(jsonColor[0], jsonColor[1], jsonColor[2], jsonColor[3]) };
+					object.vertices.push_back(vertex);
+				}
+				model.objects.push_back(object);
+			}
+			model.Generate();
+			return model;
+		}
+		catch (int e) {
+			std::cout << "error " << e << std::endl;
+		}
+		return Model();
 	}
 	static void SetBlockData(BlockData block, std::string path) {
 

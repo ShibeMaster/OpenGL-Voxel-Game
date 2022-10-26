@@ -6,6 +6,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/hash.hpp>
+#include "ChunkGenerationManager.h"
 #include "Chunk.h"
 #include "Mesh.h"
 #include <unordered_map>
@@ -16,12 +17,14 @@
 #include <NetworkChannelManager.h>
 #include <Network.h>
 
+#define LOADED_RADIUS 5
+
 struct ChunkRequestMessage : public ShibaNetLib::NetworkMessage {
-	glm::vec2 position;
+	glm::vec3 position;
 };
 
 struct ChunkRequestCallbackMessage : public ShibaNetLib::NetworkMessage {
-	glm::vec2 position;
+	glm::vec3 position;
 	short segment;
 	std::byte chunkSegment[16][16][16];
 };
@@ -30,13 +33,11 @@ struct ChunkRequestCallbackMessage : public ShibaNetLib::NetworkMessage {
 class Terrain
 {
 public:
-	static std::unordered_map<glm::vec2, Chunk> chunks;
-	static const int LOADED_RADIUS = 9;
-	static Chunk* loadedChunks[9][9];
-	static const int CHUNK_LENGTH = 16;
-	static const int CHUNK_WIDTH = 16;
+	static std::unordered_map<glm::vec3, Chunk> chunks;
+	static std::vector<Chunk*> loadedChunks;
+	static glm::vec3 centeredChunkPosition;
 	const int SEED = rand();
-	static std::deque<Chunk*> chunkGenerationQueue;
+	static std::deque<glm::vec3> chunkGenerationQueue;
 	static std::deque<std::pair<Chunk*, std::vector<Vertex>>> chunkMeshGenerationQueue;
 	static BiomeManager biomeManager;
 	static int emptyBlock;
@@ -45,16 +46,17 @@ public:
 	glm::vec3 GetSelectedBlock(glm::vec3 position, glm::vec3 forward, bool placing);
 	bool Raycast(glm::vec3 startingPosition, glm::vec3 direction, int distance);
 	glm::vec3 ClampChunkY(glm::vec3 position);
-	static glm::vec2 GetChunkPosition(glm::vec3 position);
+	static glm::vec3 GetChunkPosition(glm::vec3 position);
 	static Chunk* GetPositionChunk(glm::vec3 position);
 	Chunk* GetPositionChunkPointer(glm::vec3 position);
 	int GetPositionValueChunk(Chunk* chunk, glm::vec3 position);
-	static bool ChunkExists(glm::vec2 chunkpos);
+	static bool ChunkExists(glm::vec3 chunkpos);
 	static glm::vec3 GetLocalPosition(glm::vec3 position);
 	static int GetPositionValue(glm::vec3 globalPos);
 	bool IsChunkLoaded(Chunk* chunk);
 	void GenerationThread();
 	void MeshGeneration();
+	static void ChunkGeneration(glm::vec3 chunkPos);
 	void SetPosition(glm::vec3 position, int value);
 	void CreateBlock(glm::vec3 position, int data);
 	void DestroyBlock(glm::vec3 position);
@@ -80,13 +82,13 @@ class ChunkRequestChannel : public ShibaNetLib::NetworkChannel {
 			while (!chunkQueue.empty()) {
 				std::cout << "received chunk request" << std::endl;
 				ChunkRequestMessage incoming = chunkQueue.front();
-				glm::vec2 chunkPos = incoming.position;
+				glm::vec3 chunkPos = incoming.position;
 				if (!Terrain::ChunkExists(chunkPos) || Terrain::chunks[chunkPos].state == ChunkState::chunkstate_empty) {
 					Chunk chunk = Chunk(chunkPos);
 					chunk.Generate(Terrain::biomeManager);
 					chunk.state = ChunkState::chunkstate_generated;
 					Terrain::chunks[chunkPos] = chunk;
-					Terrain::chunkGenerationQueue.push_back(&Terrain::chunks[chunkPos]);
+					Terrain::chunkGenerationQueue.push_back(chunkPos);
 					chunkQueue.pop_front();
 					chunkQueue.push_back(incoming);
 					continue;
@@ -138,13 +140,13 @@ class ChunkRequestCallbackChannel : public ShibaNetLib::NetworkChannel {
 						}
 					}
 				}
-				Terrain::chunks[message.position].segmentsLoaded++;
+				//Terrain::chunks[message.position].segmentsLoaded++;
 				chunkQueue.pop_front();
-				if (Terrain::chunks[message.position].segmentsLoaded == 2) {
+				/*if (Terrain::chunks[message.position].segmentsLoaded == 2) {
 					Terrain::chunks[message.position].state = ChunkState::chunkstate_generated;
 					Terrain::chunkMeshGenerationQueue.push_back(std::pair(&Terrain::chunks[message.position], Terrain::CreateChunkVertexArray(&Terrain::chunks[message.position])));
 					std::cout << "finished unloading chunk" << std::endl;
-				}
+				}*/
 			}
 		}
 	}

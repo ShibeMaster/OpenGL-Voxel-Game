@@ -2,3 +2,4 @@
 
 Scene* SceneManager::activeScene;
 World SceneManager::world;
+ModelEditor SceneManager::editor;

@@ -10,7 +10,7 @@ class PhysicsObject
 {
 public:
 	PhysicsCache cache;
-	glm::vec3 velocity;
+	glm::vec3 velocity = glm::vec3(0.0f);
 	BoundingBox boundingBox;
 	Mesh mesh;
 	bool applyDrag;
@@ -21,7 +21,7 @@ public:
 	float velocityLimitY = 12.0f;
 
 	PhysicsObject() {}
-	PhysicsObject(bool useGravity, bool useCollisions, bool applyDrag, glm::vec3 boundingBoxOffset, float boundingBoxHeight, float boundingBoxRadius) {
+	PhysicsObject(bool useGravity, bool useCollisions, bool applyDrag, glm::vec3 boundingBoxOffset = glm::vec3(0.0f), float boundingBoxHeight = 0.0f, float boundingBoxRadius = 0.0f) {
 		this->applyDrag = applyDrag;
 		this->useCollisions = useCollisions;
 		this->useGravity = useGravity;
@@ -74,15 +74,15 @@ public:
 		if (applyDrag)
 			velocity = PhysicsExtensions::ApplyDrag(velocity);
 
-		if (useGravity)
-			velocity = PhysicsExtensions::ApplyGravity(velocity);
+		// if (useGravity)
+			// velocity = PhysicsExtensions::ApplyGravity(velocity);
 
 
-		if (useCollisions)
-			CheckCollisions(position);
+		// if (useCollisions)
+			// CheckCollisions(position);
 
-		if (velocity.y > velocityLimitY)
-			velocity.y = velocityLimitY;
+		// if (velocity.y > velocityLimitY)
+			// velocity.y = velocityLimitY;
 		cache.CacheVariables(position, velocity);
 
 		return position + velocity * Time::fixedDeltaTime;

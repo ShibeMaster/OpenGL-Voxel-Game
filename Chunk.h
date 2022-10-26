@@ -2,7 +2,10 @@
 #include "Renderer.h"
 #include <GL/glew.h>
 #include <glm/gtx/hash.hpp>
+#include "ChunkGenerationManager.h"
 #include <FastNoiseLite.h>
+#include <thread>
+#include <glm/gtx/hash.hpp>
 #include <unordered_map>
 #include "Mesh.h"
 #include <vector>
@@ -12,6 +15,11 @@
 // Layers
 // (height - y >= layerdepth &&) set layer block
 
+
+
+#define CHUNK_LENGTH 16
+#define CHUNK_WIDTH 16
+#define CHUNK_HEIGHT 16
 
 const glm::vec3 dirup = glm::vec3(0.0f, 1.0f, 0.0f);
 const glm::vec3 dirdown = glm::vec3(0.0f, -1.0f, 0.0f);
@@ -29,16 +37,17 @@ enum ChunkState {
 class Chunk
 {
 public:
-	std::byte chunk[16][32][16];
-	glm::vec2 chunkPos;
+	std::byte chunk[CHUNK_WIDTH][CHUNK_HEIGHT][CHUNK_LENGTH];
+	glm::vec3 chunkPos;
 	ChunkState state = ChunkState::chunkstate_empty;
-	int segmentsLoaded = 0;
 	Mesh mesh;
+	bool startedGeneration = false;
 	std::byte emptyBlock = std::byte{ 0 };
 
-	Chunk(glm::vec2 pos);
+	Chunk(glm::vec3 pos);
 	Chunk() {}
 	void Generate(BiomeManager biomes);
+	void Generation(BiomeManager biomes);
 	glm::vec3 GetChunkGlobalOrigin();
 	void SetChunkMesh(std::vector<Vertex> vertices);
 	void RenderChunk(Renderer& renderer);

@@ -6,9 +6,9 @@
 #include "BlockDataManager.h"
 #include "MathsExtensions.h"
 
-const int MAX_GENERATION_HEIGHT = 32;
-const int MID_GENERATION_HEIGHT = 24;
-const int MIN_GENERATION_HEIGHT = 12;
+#define MAX_GENERATION_HEIGHT 64
+#define MID_GENERATION_HEIGHT 54
+#define MIN_GENERATION_HEIGHT 0
 
 enum BiomeType {
 	plains,
@@ -42,10 +42,10 @@ class BiomeManager
 {
 public:
 	std::vector<Biome> biomedefs = {
-		Biome{ BiomeType::plains,  { Layer{BlockType::dirt, 32, 12, 2}, Layer{BlockType::sand, 12, 7, 2} }, BlockType::stone, 0.5f, -0.5f, 1.0f, -0.25f },
-		Biome{ BiomeType::desert, { Layer{ BlockType::sand, 32, 6, 5 } }, BlockType::stone, 1.0f, 0.5f, 0.0f, -1.0f },
-		Biome{ BiomeType::snowField, { Layer{BlockType::snow, 32, 12, 2}, Layer{BlockType::dirt, 12, 7, 2} }, BlockType::stone, -0.25f, -1.0f, 1.0f, 0.25f },
-		Biome{ BiomeType::river, { Layer{BlockType::water, 20, 10, 5} }, BlockType::sand, 0.0f, 0.0f, 1.0f, 0.25f}
+		Biome{ BiomeType::plains,  { Layer{BlockType::dirt, 64, 48, 2}, Layer{BlockType::sand, 48, 36, 2} }, BlockType::stone, 0.5f, -0.5f, 1.0f, -0.25f },
+		Biome{ BiomeType::desert, { Layer{ BlockType::sand, 64, 48, 5 } }, BlockType::stone, 1.0f, 0.5f, 0.0f, -1.0f },
+		Biome{ BiomeType::snowField, { Layer{BlockType::snow, 64, 48, 2}, Layer{BlockType::dirt, 48, 36, 2} }, BlockType::stone, -0.25f, -1.0f, 1.0f, 0.25f },
+		Biome{ BiomeType::river, { Layer{BlockType::water, 49, 36, 5} }, BlockType::sand, 0.0f, 0.0f, 1.0f, 0.25f}
 	};
 
 	std::map<int, Biome> biomes;

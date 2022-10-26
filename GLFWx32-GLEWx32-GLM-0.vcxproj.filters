@@ -237,6 +237,9 @@
     <ClCompile Include="BoundingBox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ChunkGenerationManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BlockData.h">
@@ -403,6 +406,21 @@
     </ClInclude>
     <ClInclude Include="BoundingBox.h">
       <Filter>Header Files\Engine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="ChunkGenerationManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelEditor.h">
+      <Filter>Header Files\Engine\Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Header Files\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>Header Files\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="SpectatorCamera.h">
+      <Filter>Header Files\Engine\Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

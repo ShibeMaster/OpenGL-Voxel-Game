@@ -53,8 +53,9 @@ public:
 
 		std::cout << "started" << std::endl;
 		chunkGeneration = std::thread([this] { this->terrain.GenerationThread(); });
-		terrain.UpdateRenderedChunks(player.GetPosition());
-	
+		
+		terrain.UpdateRenderedChunks(player.data.camera.position);
+		std::cout << player.GetPosition().x << " | " << player.GetPosition().z << std::endl;
 		ShibaNetLib::NetworkChannelManager::AddNetworkChannel(&updateChannel);
 		ShibaNetLib::NetworkChannelManager::AddNetworkChannel(&requestChannel);
 
@@ -72,12 +73,12 @@ public:
 		if (InputManager::GetKeyDown(GLFW_KEY_C) && glfwGetTime() - timeSinceLastPlaced >= 0.25f) {
 			player.state.placingState = player.state.placingState == PlacingState::placingstate_breaking ? PlacingState::placingstate_placing : PlacingState::placingstate_breaking;		timeSinceLastPlaced = glfwGetTime();
 		}
-		if (InputManager::GetKeyDown(GLFW_KEY_F3)) {
-			player.data.camera.position.y = 27.0f;
+		if (InputManager::GetKeyDown(GLFW_KEY_F3) && glfwGetTime() - timeSinceLastPlaced >= 0.25f) {
+			player.data.camera.position.y = 100.0f;
 			player.data.camera.position.x = 0.0f;
 			player.data.camera.position.z = 0.0f;
-			player.data.physics.velocity.y = 0.0f;
 			std::cout << player.data.camera.position.x << " | " << player.data.camera.position.y << " | " << player.data.camera.position.z << std::endl;
+			timeSinceLastPlaced = glfwGetTime();
 		}
 		if (InputManager::GetKeyDown(GLFW_KEY_SPACE) && glfwGetTime() - timeSinceLastSwappedMode >= 0.25f && !hud.menuOpen) {
 			if (player.data.inventory.inventory[player.data.inventory.selectedIndex].data.usage == ItemUsageType::usage_consumable) {}

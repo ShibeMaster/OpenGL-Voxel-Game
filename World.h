@@ -7,6 +7,7 @@
 #include <thread>
 #include "Shaders.h"
 #include <iostream>
+#include "Model.h"
 #include "GUIButton.h"
 #include "GUIItem.h"
 #include "GUIPercentageBar.h"

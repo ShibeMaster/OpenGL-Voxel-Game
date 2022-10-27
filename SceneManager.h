@@ -1,5 +1,6 @@
 #pragma once
 #include "Scene.h"
+#include "GUIManager.h"
 #include "ModelEditor.h"
 #include "World.h"
 
@@ -10,6 +11,7 @@ public:
 	static ModelEditor editor;
 
 	static void SetActiveScene(Scene* scene) {
+		GUIManager::OnSceneStart();
 		activeScene = scene;
 		activeScene->Start();
 	}

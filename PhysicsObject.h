@@ -74,8 +74,8 @@ public:
 		if (applyDrag)
 			velocity = PhysicsExtensions::ApplyDrag(velocity);
 
-		// if (useGravity)
-			// velocity = PhysicsExtensions::ApplyGravity(velocity);
+		if (useGravity)
+			velocity = PhysicsExtensions::ApplyGravity(velocity);
 
 
 		// if (useCollisions)

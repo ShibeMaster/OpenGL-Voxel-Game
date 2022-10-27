@@ -12,8 +12,8 @@ public:
 	GUITextbox(){}
 	GUITextbox(glm::vec2 position, glm::vec2 dimensions, glm::vec4 color, glm::vec4 textColor, int maxcharacters, std::string startingText, std::string captionText, GUIAlignment alignment) : GUIItem(position, dimensions, color, alignment) {
 		this->maxCharacters = maxcharacters;
-		this->text = text;
-		this->textGui = GUIText(text, glm::vec2(this->position.x + (this->dimensions.x / 2), this->position.y + (this->dimensions.y / 2) - 7.5f), 0.6f, textColor, GUIAlignment::alignment_center);
+		this->text = startingText;
+		this->textGui = GUIText(this->text, glm::vec2(this->position.x + (this->dimensions.x / 2), this->position.y + (this->dimensions.y / 2) - 7.5f), 0.6f, textColor, GUIAlignment::alignment_center);
 		this->captionText = GUIText(captionText, glm::vec2(this->position.x - 20.0f, this->position.y + (this->dimensions.y / 2) - 5.0f), 0.5f, glm::vec3(1.0f, 1.0f, 1.0f), GUIAlignment::alignment_left);
 	}
 	void CheckForPress(GLFWwindow* window, int button, int action) {

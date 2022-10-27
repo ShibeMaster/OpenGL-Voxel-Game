@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "Shaders.h"
 #include <vector>
+#include "GUIText.h"
 #include "Model.h"
 #include <nlohmann/json.hpp>
 #include "SpectatorCamera.h"
@@ -13,14 +14,13 @@ public:
 	std::string path;
 	Model model;
 	std::string jsonString;
+	GUIText modelTitle;
 	SpectatorCamera camera;
 
 	void Start() {
 		InputManager::SetMouseLocked();
 		renderer.Initialize(Shaders::vertexSource, Shaders::fragmentSource);
 		renderer.shader.Use();
-		std::cout << "Enter the resource path of the model you want to load: " << std::endl;
-		std::cin >> path;
 
 		std::ifstream file(Resources::ResourcesPath + path + ".json");
 		jsonString = nlohmann::json::parse(file).dump(4);
@@ -33,6 +33,7 @@ public:
 
 		camera.camera = Camera(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f);
 
+		modelTitle = GUIText(model.name, glm::vec2(100, 750), 1.0f, glm::vec3(1.0f), GUIAlignment::alignment_center);
 		started = true;
 	}
 	void HandleMouseInput(GLFWwindow* window, double xpos, double ypos) {
@@ -63,6 +64,7 @@ public:
 			model = Resources::LoadModel(path);
 		}
 
-		model.Render(renderer);
+		model.Render(glm::vec3(0.0f), renderer);
+		modelTitle.Render();
 	}
 };

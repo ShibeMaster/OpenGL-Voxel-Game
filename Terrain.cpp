@@ -77,7 +77,7 @@ void Terrain::GenerationThread() {
 		if (!chunkGenerationQueue.empty()) {
 			glm::vec3 chunkPos = chunkGenerationQueue.front();
 			ChunkGenerationManager::generationThreads[chunkPos] = std::thread(ChunkGeneration, chunkPos);
-			ChunkGenerationManager::generationThreads[chunkPos].join();
+			ChunkGenerationManager::generationThreads[chunkPos].detach();
 			chunkGenerationQueue.pop_front();
 		}
 	}

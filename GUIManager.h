@@ -11,6 +11,11 @@ public:
 	static std::vector<GUIButton*> buttons;
 	static std::vector<GUISlider*> sliders;
 	static Renderer renderer;
+	static void OnSceneStart() {
+		textboxs.clear();
+		buttons.clear();
+		sliders.clear();
+	}
 	static void RegisterTextbox(GUITextbox* textbox) {
 		textboxs.push_back(textbox);
 	}

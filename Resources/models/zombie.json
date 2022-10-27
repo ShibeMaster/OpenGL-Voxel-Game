@@ -1,9 +1,9 @@
 {
-    "name": "cube",
+    "name": "zombie",
     "objects": [
         {
             "name": "left_foot",
-            "type": "cube",
+            "type": "models\\cube",
             "transform": {
                 "position": [ -0.3, 0, 0],
                 "rotation": [ 0, 0, 0],
@@ -13,7 +13,7 @@
         },
         {
             "name": "right_foot",
-            "type": "cube",
+            "type": "models\\cube",
             "transform": {
                 "position": [ 0.3, 0, 0],
                 "rotation": [ 0, 0, 0],
@@ -23,7 +23,7 @@
         },
         {
             "name": "body",
-            "type": "cube",
+            "type": "models\\cube",
             "transform": {
                 "position": [ 0, 1.125, 0],
                 "rotation": [ 0, 0, 0],
@@ -33,7 +33,7 @@
         },
         {
             "name": "right_arm",
-            "type": "cube",
+            "type": "models\\cube",
             "transform": {
                 "position": [ 0.6, 1.2, 0],
                 "rotation": [ 0, 0, 0],
@@ -43,7 +43,7 @@
         },
         {
             "name": "left_arm",
-            "type": "cube",
+            "type": "models\\cube",
             "transform": {
                 "position": [ -0.6, 1.2, 0],
                 "rotation": [ 0, 0, 0],
@@ -53,7 +53,7 @@
         },
         {
             "name": "head",
-            "type": "cube",
+            "type": "models\\cube",
             "transform": {
                 "position": [ 0, 2, 0],
                 "rotation": [ 0, 0, 0],
@@ -63,7 +63,7 @@
         },
         {
             "name": "face_mouth",
-            "type": "cube",
+            "type": "models\\cube",
             "transform": {
                 "position": [ 0.0, 1.9, 0.25],
                 "rotation": [ 0, 0, 0],
@@ -73,7 +73,7 @@
         },
         {
             "name": "face_eye_left",
-            "type": "cube",
+            "type": "models\\cube",
             "transform": {
                 "position": [ -0.1, 2.1, 0.25],
                 "rotation": [ 0, 0, 0],
@@ -83,10 +83,10 @@
         },
         {
             "name": "face_eye_left",
-            "type": "cube",
+            "type": "models\\cube",
             "transform": {
-                "position": [ 0.1, 2.1, 0.25],
-                "rotation": [ 0, 0, 0],
+                "position": [ 0.1, 2.1, 0.25 ],
+                "rotation": [ 0, 0, 0 ],
                 "scale": [ 0.05, 0.05, 0.05 ]
             },
             "color": [ 1.0, 1.0, 1.0, 1.0 ]

@@ -97,6 +97,7 @@ public:
 			file.close();
 			Model model;
 			model.name = data["name"];
+			std::map<std::string, Model> otherRequiredModels;
 			for (auto jsonObject : data["objects"]) {
 				Object object;
 				json transformPosition = jsonObject["transform"]["position"];
@@ -113,12 +114,16 @@ public:
 						object.vertices.push_back(vertex);
 					}
 				}
-				else if (jsonObject["type"] == "cube") {
-					for (int i = 0; i < 36 * 3; i += 3) {
-						Vertex vertex;
-						vertex.color = glm::vec4(jsonObject["color"][0], jsonObject["color"][1], jsonObject["color"][2], jsonObject["color"][3]);
-						vertex.position = glm::vec3(vertices[i], vertices[i + 1], vertices[i + 2]);
-						object.vertices.push_back(vertex);
+				else {
+					std::string objectResourcePath = jsonObject["type"];
+					if (otherRequiredModels.find(objectResourcePath) == otherRequiredModels.end())
+						otherRequiredModels[objectResourcePath] = LoadModel(objectResourcePath);
+
+					for (Object otherModel : otherRequiredModels[objectResourcePath].objects) {
+						for (Vertex vertex : otherModel.vertices) {
+							vertex.color = glm::vec4(jsonObject["color"][0], jsonObject["color"][1], jsonObject["color"][2], jsonObject["color"][3]);
+							object.vertices.push_back(vertex);
+						}
 					}
 				}
 				model.objects.push_back(object);

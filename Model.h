@@ -22,10 +22,10 @@ public:
 		}
 	}
 
-	void Render(Renderer& renderer) {
+	void Render(glm::vec3 position, Renderer& renderer) {
 		renderer.shader.Use();
 		for (Object object : objects) {
-			renderer.shader.SetMat4("model", object.transform.GetMatrix());
+			renderer.shader.SetMat4("model", object.transform.GetMatrix(position));
 			object.mesh.DrawMesh();
 		}
 	}

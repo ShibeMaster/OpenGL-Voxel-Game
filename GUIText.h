@@ -3,6 +3,7 @@
 #include <iostream>
 #include <glm/glm.hpp>
 #include <string>
+#include "Mesh.h"
 #include "Text.h"
 
 class GUIText {

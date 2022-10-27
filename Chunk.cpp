@@ -40,7 +40,7 @@ void Chunk::Generate(BiomeManager biomes) {
 	state = ChunkState::chunkstate_generated;
 }
 glm::vec3 Chunk::GetChunkGlobalOrigin() {
-	return glm::vec3(chunkPos.x * CHUNK_WIDTH, chunkPos.y * CHUNK_HEIGHT, chunkPos.z * CHUNK_LENGTH);
+ 	return glm::vec3(chunkPos.x * CHUNK_WIDTH, chunkPos.y * CHUNK_HEIGHT, chunkPos.z * CHUNK_LENGTH);
 }
 void Chunk::SetChunkMesh(std::vector<Vertex> vertices) {
 	this->mesh = Mesh(vertices);

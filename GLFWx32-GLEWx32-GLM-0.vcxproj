@@ -25,7 +25,6 @@
     <ClCompile Include="BoundingBox.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Chunk.cpp" />
-    <ClCompile Include="ChunkGenerationManager.cpp" />
     <ClCompile Include="ClientData.cpp" />
     <ClCompile Include="ClientManifestManager.cpp" />
     <ClCompile Include="ClientObject.cpp" />
@@ -73,7 +72,6 @@
     <ClInclude Include="BlockData.h" />
     <ClInclude Include="BlockDataManager.h" />
     <ClInclude Include="BoundingBox.h" />
-    <ClInclude Include="ChunkGenerationManager.h" />
     <ClInclude Include="GUIManager.h" />
     <ClInclude Include="GUITextbox.h" />
     <ClInclude Include="Model.h" />

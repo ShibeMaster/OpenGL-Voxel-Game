@@ -54,11 +54,7 @@ GLFWwindow* CreateDisplay(const char* title, int width, int height) {
 void ProcessInput() {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE))
 		glfwSetWindowShouldClose(window, true);
-
-	if (InputManager::GetKeyDown(GLFW_KEY_F3) && glfwGetTime() - lastActionTime > 0.25f) {
-		SceneManager::SetActiveScene(&SceneManager::editor);
-		lastActionTime = glfwGetTime();
-	}
+	
 	if (InputManager::GetKeyDown(GLFW_KEY_F4) && glfwGetTime() - lastActionTime > 0.25f) {
 		lastActionTime = glfwGetTime();
 		std::cout << "started connecting" << std::endl;

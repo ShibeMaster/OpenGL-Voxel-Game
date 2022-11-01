@@ -6,7 +6,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/hash.hpp>
-#include "ChunkGenerationManager.h"
 #include "Chunk.h"
 #include "Mesh.h"
 #include <unordered_map>
@@ -17,7 +16,8 @@
 #include <NetworkChannelManager.h>
 #include <Network.h>
 
-#define LOADED_RADIUS 5
+#define VISIBLE_RADIUS 5
+#define LOADED_RADIUS 6
 
 struct ChunkRequestMessage : public ShibaNetLib::NetworkMessage {
 	glm::vec3 position;
@@ -40,6 +40,7 @@ public:
 	static std::deque<glm::vec3> chunkGenerationQueue;
 	static std::deque<std::pair<Chunk*, std::vector<Vertex>>> chunkMeshGenerationQueue;
 	static BiomeManager biomeManager;
+	static std::unordered_map<glm::vec3, std::thread> generationThreads;
 	static int emptyBlock;
 
 	static bool CheckForChunkUpdates(glm::vec3 position);
@@ -56,7 +57,6 @@ public:
 	bool IsChunkLoaded(Chunk* chunk);
 	void GenerationThread();
 	void MeshGeneration();
-	static void ChunkGeneration(glm::vec3 chunkPos);
 	void SetPosition(glm::vec3 position, int value);
 	void CreateBlock(glm::vec3 position, int data);
 	void DestroyBlock(glm::vec3 position);

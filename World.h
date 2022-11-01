@@ -34,6 +34,12 @@ public:
 	float timeSinceLastPlaced = 0.0f;
 	float timeSinceLastSwappedMode = 0.0f;
 
+
+
+
+	GUIText coordinateDisplay;
+	GUIText velocityDisplay;
+
 	World() {
 		this->sceneId = 0;
 		std::cout << "started scene" << std::endl;
@@ -63,6 +69,11 @@ public:
 		ShibaNetLib::NetworkChannelManager::AddNetworkChannel(&chunkRequestChannel);
 		ShibaNetLib::NetworkChannelManager::AddNetworkChannel(&chunkRequestCallbackChannel);
 
+
+		coordinateDisplay = GUIText("Position: " + std::to_string(player.data.camera.position.x) + " | " + std::to_string(player.data.camera.position.y) + " | " + std::to_string(player.data.camera.position.z), glm::vec2(50, 750), 0.5f, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), GUIAlignment::alignment_right);
+		velocityDisplay = GUIText("Velocity: " + std::to_string(player.data.physics.velocity.x) + " | " + std::to_string(player.data.physics.velocity.y) + " | " + std::to_string(player.data.physics.velocity.z), glm::vec2(50, 700), 0.5f, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), GUIAlignment::alignment_right);
+
+		
 		started = true;
 	}
 	
@@ -120,10 +131,16 @@ public:
 		player.Update();
 
 		ProcessInput();
-
+		
 		terrain.MeshGeneration();
 		terrain.UpdateRenderedChunks(player.GetPosition());
 		terrain.RenderChunks(renderer);
+
+		coordinateDisplay.text = "Position: " + std::to_string(player.data.camera.position.x) + " | " + std::to_string(player.data.camera.position.y) + " | " + std::to_string(player.data.camera.position.z);
+		velocityDisplay.text = "Velocity: " + std::to_string(player.data.physics.velocity.x) + " | " + std::to_string(player.data.physics.velocity.y) + " | " + std::to_string(player.data.physics.velocity.z);
+
+		coordinateDisplay.Render();
+		velocityDisplay.Render();
 
 		NetworkedPlayersManager::Render(renderer);
 

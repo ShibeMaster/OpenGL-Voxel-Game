@@ -1,5 +1,10 @@
 {
     "name": "cube",
+    "shader": {
+        "vertex": "shaders\\vertex",
+        "fragment": "shaders\\fragment",
+        "uniforms": []
+    },
     "objects": [
         {
             "name": "cube",

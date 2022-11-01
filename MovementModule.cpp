@@ -10,7 +10,7 @@ void Modules::MovementModule::ManageInput() {
 		glm::vec3 newDir = glm::vec3(0.0f);
 		newDir += PhysicsExtensions::RemoveY(data->forward) * InputManager::MoveVert();
 		newDir += PhysicsExtensions::RemoveY(data->right) * InputManager::MoveHorz();
-		newDir += data->up * InputManager::MoveUpDown();
+		// newDir += data->up * InputManager::MoveUpDown();
 		data->direction = newDir;
 
 

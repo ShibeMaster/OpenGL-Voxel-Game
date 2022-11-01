@@ -8,7 +8,7 @@ public:
 	float radius;
 
 	glm::vec3 GetPosition(glm::vec3 position) {
-		return position - offsetPosition;
+		return position + offsetPosition;
 	}
 
 	BoundingBox(){}

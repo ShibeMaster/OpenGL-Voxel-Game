@@ -14,6 +14,7 @@ struct Object {
 class Model {
 public:
 	std::string name;
+	Renderer renderer;
 	std::vector<Object> objects;
 
 	void Generate() {
@@ -22,7 +23,7 @@ public:
 		}
 	}
 
-	void Render(glm::vec3 position, Renderer& renderer) {
+	void Render(glm::vec3 position) {
 		renderer.shader.Use();
 		for (Object object : objects) {
 			renderer.shader.SetMat4("model", object.transform.GetMatrix(position));

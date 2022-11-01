@@ -10,7 +10,6 @@
 
 class ModelEditor : public Scene {
 public:
-	Renderer renderer;
 	std::string path;
 	Model model;
 	std::string jsonString;
@@ -19,17 +18,12 @@ public:
 
 	void Start() {
 		InputManager::SetMouseLocked();
-		renderer.Initialize(Shaders::vertexSource, Shaders::fragmentSource);
-		renderer.shader.Use();
 
 		std::ifstream file(Resources::ResourcesPath + path + ".json");
 		jsonString = nlohmann::json::parse(file).dump(4);
 		file.close();
 		model = Resources::LoadModel(path);
 		model.Generate();
-
-		glm::mat4 projection = glm::perspective(45.0f, 800.0f / 800.0f, 0.1f, 100.0f);
-		renderer.shader.SetMat4("projection", projection);
 
 		camera.camera = Camera(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f);
 
@@ -39,20 +33,19 @@ public:
 	void HandleMouseInput(GLFWwindow* window, double xpos, double ypos) {
 		camera.camera.ProcessCameraMouse();
 	}
-	void FixedUpdate() {
-		camera.FixedUpdate();
-	}
 	void Update() {
-
+		camera.Update();
 
 		glm::mat4 modelMat = glm::mat4(1.0f);
-		renderer.shader.SetMat4("model", modelMat);
+		model.renderer.shader.SetMat4("model", modelMat);
+
+		glm::mat4 projection = glm::perspective(45.0f, 800.0f / 800.0f, 0.1f, 100.0f);
+		model.renderer.shader.SetMat4("projection", projection);
 
 		glm::mat4 view = camera.camera.GetViewMatrix();
-		renderer.shader.SetMat4("view", view);
+		model.renderer.shader.SetMat4("view", view);
 
 		if (Resources::ResourcesUpdated(path, jsonString)) {
-			std::cout << "updated" << std::endl;
 			std::ifstream file(Resources::ResourcesPath + path + ".json");
 			if (file) {
 				std::ostringstream ss;
@@ -64,7 +57,7 @@ public:
 			model = Resources::LoadModel(path);
 		}
 
-		model.Render(glm::vec3(0.0f), renderer);
+		model.Render(glm::vec3(0.0f));
 		modelTitle.Render();
 	}
 };

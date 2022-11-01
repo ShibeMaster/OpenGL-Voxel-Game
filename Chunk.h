@@ -2,7 +2,6 @@
 #include "Renderer.h"
 #include <GL/glew.h>
 #include <glm/gtx/hash.hpp>
-#include "ChunkGenerationManager.h"
 #include <FastNoiseLite.h>
 #include <thread>
 #include <glm/gtx/hash.hpp>

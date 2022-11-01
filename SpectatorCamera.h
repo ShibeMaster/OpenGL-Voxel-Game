@@ -3,18 +3,18 @@
 #include "PhysicsObject.h"
 class SpectatorCamera {
 public:
-	const float speed = 5.0f;
+	const float speed = 2.0f;
 	Camera camera = Camera(glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f);
-	PhysicsObject physics = PhysicsObject(false, false, true);
+	PhysicsObject physics = PhysicsObject(false, false, true, speed);
 
-	void FixedUpdate() {
+	void Update() {
 		glm::vec3 newDir = glm::vec3(0.0f);
-		newDir += camera.forward * InputManager::MoveVert();
-		newDir += camera.right * InputManager::MoveHorz();
+		newDir += PhysicsExtensions::RemoveY(camera.forward * InputManager::MoveVert());
+		newDir += PhysicsExtensions::RemoveY(camera.right * InputManager::MoveHorz());
 		newDir += camera.up * InputManager::MoveUpDown();
 
 		physics.velocity += (newDir * speed);
 
-		camera.position = physics.PhysicsFixedUpdate(camera.position);
+		camera.position = physics.PhysicsUpdate(camera.position);
 	}
 };

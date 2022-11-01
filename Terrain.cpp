@@ -30,7 +30,7 @@ glm::vec3 Terrain::ClampChunkY(glm::vec3 position) {
 	return glm::clamp(position, glm::vec3(position.x, 0.0f, position.z), glm::vec3(position.x, 16.0f, position.z));
 }
 glm::vec3 Terrain::GetChunkPosition(glm::vec3 position) {
-	return glm::floor(glm::vec3((int)floor(position.x) / CHUNK_WIDTH, (int)floor(position.y) / CHUNK_HEIGHT, (int)floor(position.z) / CHUNK_LENGTH));
+	return glm::vec3(floor(position.x / CHUNK_WIDTH), floor(position.y / CHUNK_HEIGHT), floor(position.z / CHUNK_LENGTH));
 }
 Chunk* Terrain::GetPositionChunk(glm::vec3 position) {
 	glm::vec3 chunkPosition = GetChunkPosition(position);
@@ -61,23 +61,16 @@ int Terrain::GetPositionValue(glm::vec3 globalPos) {
 bool Terrain::IsChunkLoaded(Chunk* chunk) {
 	return chunk->chunkPos.x > centeredChunkPosition.x - LOADED_RADIUS && chunk->chunkPos.x < centeredChunkPosition.x + LOADED_RADIUS && chunk->chunkPos.y > centeredChunkPosition.y - LOADED_RADIUS && chunk->chunkPos.y < centeredChunkPosition.y + LOADED_RADIUS && chunk->chunkPos.z > centeredChunkPosition.z - LOADED_RADIUS && chunk->chunkPos.z < centeredChunkPosition.z + LOADED_RADIUS;
 }
-void Terrain::ChunkGeneration(glm::vec3 chunkPos) {
-	chunks[chunkPos].startedGeneration = true;
-	chunks[chunkPos].Generate(biomeManager);
-	if (chunks[chunkPos].state != ChunkState::chunkstate_empty) {
-		std::vector<Vertex> vertices = CreateChunkVertexArray(&chunks[chunkPos]);
-		chunkMeshGenerationQueue.push_back(std::pair(&chunks[chunkPos], vertices));
-	}
-	else
-		std::cout << "empty" << std::endl;
-}
-
 void Terrain::GenerationThread() {
 	while (true) {
 		if (!chunkGenerationQueue.empty()) {
 			glm::vec3 chunkPos = chunkGenerationQueue.front();
-			ChunkGenerationManager::generationThreads[chunkPos] = std::thread(ChunkGeneration, chunkPos);
-			ChunkGenerationManager::generationThreads[chunkPos].detach();
+
+			chunks[chunkPos].Generate(biomeManager);
+			if (chunks[chunkPos].state != ChunkState::chunkstate_empty) {
+				std::vector<Vertex> vertices = CreateChunkVertexArray(&chunks[chunkPos]);
+				chunkMeshGenerationQueue.push_back(std::pair(&chunks[chunkPos], vertices));
+			}
 			chunkGenerationQueue.pop_front();
 		}
 	}
@@ -183,7 +176,9 @@ void Terrain::UpdateRenderedChunks(glm::vec3 position) {
 						if (!ChunkExists(chunkPos)) {
 							Chunk chunk = Chunk(chunkPos);
 							chunks[chunkPos] = chunk;
-							loadedChunks.push_back(&chunks[chunkPos]);
+
+							if (x > -VISIBLE_RADIUS && x < VISIBLE_RADIUS && y > -VISIBLE_RADIUS && y < VISIBLE_RADIUS && z > -VISIBLE_RADIUS && z < VISIBLE_RADIUS) 
+								loadedChunks.push_back(&chunks[chunkPos]);
 
 							if (!ShibaNetLib::Network::conn.isServer && ShibaNetLib::Network::state == ShibaNetLib::NetworkState::netstate_connected) {
 								networkUpdateRequiredChunks.push_back(chunkPos);
@@ -191,7 +186,7 @@ void Terrain::UpdateRenderedChunks(glm::vec3 position) {
 							else
 								chunkGenerationQueue.push_back(chunkPos);
 						}
-						else loadedChunks.push_back(&chunks[chunkPos]);
+						else if (x > -VISIBLE_RADIUS && x < VISIBLE_RADIUS && y > -VISIBLE_RADIUS && y < VISIBLE_RADIUS && z > -VISIBLE_RADIUS && z < VISIBLE_RADIUS) loadedChunks.push_back(&chunks[chunkPos]);
 					}
 				}
 			}

@@ -7,6 +7,7 @@
 #include "Model.h"
 #include "ItemData.h"
 #include "BlockDataManager.h"
+#include "Shader.h"
 #include "ItemDataManager.h"
 #include <nlohmann/json.hpp>
 
@@ -27,6 +28,7 @@ public:
 		std::filesystem::create_directory(ResourcesPath + "biomes");
 		std::filesystem::create_directory(ResourcesPath + "items");
 		std::filesystem::create_directory(ResourcesPath + "models");
+		std::filesystem::create_directory(ResourcesPath + "shaders");
 		LoadResources();
 	}
 	#pragma region Loading Data
@@ -71,23 +73,37 @@ public:
 		item.stackable = data["stackable"];
 		return item;
 	}
+	static std::string ReadResource(std::string path) {
+
+		std::ifstream file(ResourcesPath + path);
+		std::string data;
+		if (file) {
+			std::ostringstream ss;
+			ss << file.rdbuf(); // reading data
+			data = ss.str();
+		}
+		file.close();
+		return data;
+	}
 	static bool ResourcesUpdated(std::string resourcePath, std::string oldJson) {
 
 		try {
-			std::ifstream file(ResourcesPath + resourcePath + ".json");
-			std::string data;
-			if (file) {
-				std::ostringstream ss;
-				ss << file.rdbuf(); // reading data
-				data = ss.str();
-			}
-			file.close();
+			std::string data = ReadResource(resourcePath + ".json");
 			return oldJson != data;
 		}
 		catch (int e) {
 			std::cout << "error " << e << std::endl;
 			return false;
 		}
+	}
+	static Shader LoadShader(std::string vertexResource, std::string fragmentResource) {
+		std::cout << vertexResource << " | " << fragmentResource << std::endl;
+
+		std::string vertex = ReadResource(vertexResource + ".txt");
+		std::string fragment = ReadResource(fragmentResource + ".txt");
+
+		Shader shader = Shader(vertex.c_str(), fragment.c_str());
+		return shader;
 	}
 	static Model LoadModel(std::string resource) {
 		std::cout << resource << std::endl;
@@ -98,6 +114,16 @@ public:
 			Model model;
 			model.name = data["name"];
 			std::map<std::string, Model> otherRequiredModels;
+			std::string vertexPath = std::string(data["shader"]["vertex"]) + ".txt";
+			std::string fragmentPath = std::string(data["shader"]["fragment"]) + ".txt";
+			model.renderer.Initialize(ReadResource(vertexPath).c_str(), ReadResource(fragmentPath).c_str());
+			for (auto shaderUniform : data["shader"]["uniforms"]) {
+				model.renderer.shader.Use();
+				if (shaderUniform["type"] == "vec3")
+					model.renderer.shader.SetVec3(shaderUniform["title"], glm::vec3(shaderUniform["value"][0], shaderUniform["value"][1], shaderUniform["value"][2]));
+				else if (shaderUniform["type"] == "vec4")
+					model.renderer.shader.SetVec4(shaderUniform["title"], glm::vec4(shaderUniform["value"][0], shaderUniform["value"][1], shaderUniform["value"][2], shaderUniform["value"][3]));
+			}
 			for (auto jsonObject : data["objects"]) {
 				Object object;
 				json transformPosition = jsonObject["transform"]["position"];
@@ -128,6 +154,7 @@ public:
 				}
 				model.objects.push_back(object);
 			}
+			std::cout << "here" << std::endl;
 			model.Generate();
 			return model;
 		}

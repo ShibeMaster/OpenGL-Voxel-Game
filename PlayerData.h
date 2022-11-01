@@ -24,7 +24,7 @@ public:
 
 #pragma region Stats
 	int selectionDistance = 8;
-	float speed = 2.0f;
+	float speed = 7.0f;
 	float jumpForce = 5.0f;
 	float height = 1.75f;
 

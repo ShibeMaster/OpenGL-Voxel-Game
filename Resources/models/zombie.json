@@ -1,5 +1,16 @@
 {
     "name": "zombie",
+    "shader": {
+        "vertex": "shaders\\vertex",
+        "fragment": "shaders\\fragment",
+        "uniforms": [
+            {
+                "title": "test",
+                "type": "vec3",
+                "value": [ 1.0, 1.0, 1.0 ]
+            }
+        ]
+    },
     "objects": [
         {
             "name": "left_foot",

@@ -12,6 +12,7 @@
             "transform": {
                 "position": [ 0, 0, 0],
                 "rotation": [ 0, 0, 0],
+                "pivot": [ 0, 0, 0 ],
                 "scale": [ 1, 1, 1 ]
             },
             "color": [ 1.0, 1.0, 1.0, 1.0 ],

@@ -128,9 +128,10 @@ public:
 				Object object;
 				json transformPosition = jsonObject["transform"]["position"];
 				json transformRotation = jsonObject["transform"]["rotation"];
+				json transformPivot = jsonObject["transform"]["pivot"];
 				json transformScale = jsonObject["transform"]["scale"];
 
-				object.transform = Transform{ glm::vec3(transformPosition[0], transformPosition[1], transformPosition[2]), glm::vec3(transformRotation[0], transformRotation[1], transformRotation[2]), glm::vec3(transformScale[0], transformScale[1], transformScale[2]) };
+				object.transform = Transform{ glm::vec3(transformPosition[0], transformPosition[1], transformPosition[2]), glm::vec3(transformRotation[0], transformRotation[1], transformRotation[2]), glm::vec3(transformPivot[0], transformPivot[1], transformPivot[2]), glm::vec3(transformScale[0], transformScale[1], transformScale[2])};
 				
 				if (jsonObject["type"] == "custom") {
 					for (auto jsonVertex : jsonObject["vertices"]) {
@@ -154,7 +155,6 @@ public:
 				}
 				model.objects.push_back(object);
 			}
-			std::cout << "here" << std::endl;
 			model.Generate();
 			return model;
 		}

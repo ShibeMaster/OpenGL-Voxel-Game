@@ -132,7 +132,7 @@ public:
 				json transformScale = jsonObject["transform"]["scale"];
 
 				object.transform = Transform{ glm::vec3(transformPosition[0], transformPosition[1], transformPosition[2]), glm::vec3(transformRotation[0], transformRotation[1], transformRotation[2]), glm::vec3(transformPivot[0], transformPivot[1], transformPivot[2]), glm::vec3(transformScale[0], transformScale[1], transformScale[2])};
-				
+				object.name = jsonObject["name"];
 				if (jsonObject["type"] == "custom") {
 					for (auto jsonVertex : jsonObject["vertices"]) {
 						json jsonVertPosition = jsonVertex["position"];
@@ -146,15 +146,39 @@ public:
 					if (otherRequiredModels.find(objectResourcePath) == otherRequiredModels.end())
 						otherRequiredModels[objectResourcePath] = LoadModel(objectResourcePath);
 
-					for (Object otherModel : otherRequiredModels[objectResourcePath].objects) {
-						for (Vertex vertex : otherModel.vertices) {
+					for (auto otherModel : otherRequiredModels[objectResourcePath].objects) {
+						for (Vertex vertex : otherModel.second.vertices) {
 							vertex.color = glm::vec4(jsonObject["color"][0], jsonObject["color"][1], jsonObject["color"][2], jsonObject["color"][3]);
 							object.vertices.push_back(vertex);
 						}
 					}
 				}
-				model.objects.push_back(object);
+				model.objects[object.name] = object;
 			}
+
+			model.hasAnimation = data["hasAnimation"];
+			if (model.hasAnimation) {
+				Animation animation;
+				animation.looping = data["animation"]["looping"];
+				std::vector<Frame> keyframes;
+				for (auto jsonAnimation : data["animation"]["keyframes"]) {
+					Frame frame;
+					frame.time = jsonAnimation["time"];
+					for (auto jsonAnimChange : jsonAnimation["objectChanges"]) {
+						ObjectChange change;
+						change.name = jsonAnimChange["name"];
+						json changePosition = jsonAnimChange["transform"]["position"];
+						json changeRotation = jsonAnimChange["transform"]["rotation"];
+						json changeScale = jsonAnimChange["transform"]["scale"];
+						change.transform = Transform{ glm::vec3(changePosition[0], changePosition[1], changePosition[2]), glm::vec3(changeRotation[0], changeRotation[1], changeRotation[2]), model.objects[change.name].transform.pivot, glm::vec3(changeScale[0], changeScale[1], changeScale[2])};
+						frame.changes.push_back(change);
+					}
+					keyframes.push_back(frame);
+				}
+				animation.frames = keyframes;
+				model.animation = animation;
+			}
+
 			model.Generate();
 			return model;
 		}

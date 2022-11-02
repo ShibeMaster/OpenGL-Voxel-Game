@@ -18,16 +18,14 @@ public:
 	float setPercentage;
 	SliderDirection direction;
 	GUIText text;
-	float* value; // between min and max
 
 	float GetBarPercent() {
-		return MathsExtensions::InverseLerp(minValue, maxValue, MathsExtensions::Clamp(minValue, maxValue, *value));
+		return MathsExtensions::InverseLerp(minValue, maxValue, MathsExtensions::Clamp(minValue, maxValue, 0));
 	}
 	GUIPercentageBar() {}
-	GUIPercentageBar(glm::vec2 position, glm::vec2 dimensions, glm::vec4 backgroundColor, glm::vec4 barColor, float minValue, float maxValue, float* value, SliderDirection direction, GUIAlignment alignment, std::string text) : GUIItem(position, dimensions, backgroundColor, alignment) {
+	GUIPercentageBar(glm::vec2 position, glm::vec2 dimensions, glm::vec4 backgroundColor, glm::vec4 barColor, float minValue, float maxValue, SliderDirection direction, GUIAlignment alignment, std::string text) : GUIItem(position, dimensions, backgroundColor, alignment) {
 		this->minValue = minValue;
 		this->maxValue = maxValue;
-		this->value = value;
 		this->barColor = barColor;
 		this->direction = direction;
 		this->text = GUIText(text, glm::vec2(this->position.x - 20.0f, this->position.y + (this->dimensions.y / 2) - 5.0f), 0.5f, glm::vec3(1.0f, 1.0f, 1.0f), GUIAlignment::alignment_left);

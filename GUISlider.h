@@ -12,9 +12,8 @@ public:
 		return MathsExtensions::InverseLerp(minValue, maxValue, MathsExtensions::Clamp(minValue, maxValue, sliderValue));
 	}
 	GUISlider(){}
-	GUISlider(glm::vec2 position, glm::vec2 dimensions, glm::vec4 backgroundColor, glm::vec4 barColor, float minValue, float maxValue, float defaultValue, SliderDirection direction, GUIAlignment alignment, std::string text, bool fullNumbers) : GUIPercentageBar(position, dimensions, backgroundColor, barColor, minValue, maxValue, &sliderValue, direction, alignment, text) {
+	GUISlider(glm::vec2 position, glm::vec2 dimensions, glm::vec4 backgroundColor, glm::vec4 barColor, float minValue, float maxValue, float defaultValue, SliderDirection direction, GUIAlignment alignment, std::string text, bool fullNumbers) : GUIPercentageBar(position, dimensions, backgroundColor, barColor, minValue, maxValue, direction, alignment, text) {
 		sliderValue = defaultValue;
-		this->value = &sliderValue;
 		this->onlyFullNumbers = fullNumbers;
 	}
 	void UpdateSliderPercent(GLFWwindow* window, int button, int action) {

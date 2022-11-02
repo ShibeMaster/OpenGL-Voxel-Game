@@ -60,6 +60,7 @@
                 { "position": [ -0.5, 0.5,  -0.5 ],"color": [ 1.0, 1.0, 1.0, 1.0] }
             ]
         }
-    ]
+    ],
+    "hasAnimation": false
     
 }
